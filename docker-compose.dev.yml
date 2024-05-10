@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   traefik:
     image: traefik:latest
@@ -7,6 +9,8 @@ services:
       - "--entrypoints.web.address=:80"
       - "--api.dashboard=true"
       - "--providers.docker.exposedByDefault=false"
+      - "--log.level=TRACE"
+      - "--accesslog=true"
     ports:
       - "80:80"
       - "8080:8080"
@@ -48,10 +52,16 @@ services:
     restart: always
 
   booking:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=booking
+    image: "oven/bun"
+    entrypoint: []
+    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=booking'
+    develop:
+      watch:
+        - path: ./back
+          target: /home/bun/app
+          action: sync
+        - path: ./back/package.json
+          action: rebuild
     networks:
       - backend
     labels:
@@ -62,10 +72,16 @@ services:
       traefik.http.services.booking.loadbalancer.server.port: 3000
 
   search:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=search
+    image: "oven/bun"
+    entrypoint: []
+    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=search'
+    develop:
+      watch:
+        - path: ./back
+          target: /home/bun/app
+          action: sync
+        - path: ./back/package.json
+          action: rebuild
     networks:
       - backend
     labels:
@@ -76,10 +92,16 @@ services:
       traefik.http.services.search.loadbalancer.server.port: 3000
 
   housing:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=housing
+    image: "oven/bun"
+    entrypoint: []
+    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=housing'
+    develop:
+      watch:
+        - path: ./back
+          target: /home/bun/app
+          action: sync
+        - path: ./back/package.json
+          action: rebuild
     networks:
       - backend
     labels:
@@ -90,10 +112,16 @@ services:
       traefik.http.services.housing.loadbalancer.server.port: 3000
 
   users:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=users
+    image: "oven/bun"
+    entrypoint: []
+    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=users'
+    develop:
+      watch:
+        - path: ./back
+          target: /home/bun/app
+          action: sync
+        - path: ./back/package.json
+          action: rebuild
     networks:
       - backend
     labels:
@@ -104,24 +132,42 @@ services:
       traefik.http.services.users.loadbalancer.server.port: 3000
 
   background:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=background
+    image: "oven/bun"
+    entrypoint: []
+    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=booking'
+    develop:
+      watch:
+        - path: ./back
+          target: /home/bun/app
+          action: sync
+        - path: ./back/package.json
+          action: rebuild
     networks:
       - backend
 
   front:
     build:
       context: ./front
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    volumes:
+      - node_modules:/src/node_modules
+      - dotnuxt:/src/.nuxt
+    develop:
+      watch:
+        - path: ./front
+          target: /src
+          action: sync
+        - path: ./front/package.json
+          action: rebuild
     networks:
       - backend
+    ports:
+      - "24678:24678"
     labels:
       traefik.enable: true
       traefik.http.routers.front.rule: Host(`$TRAEFIK_HOST`)
       traefik.http.routers.front.entrypoints: web
-      traefik.http.services.front.loadbalancer.server.port: 8080
+      traefik.http.services.front.loadbalancer.server.port: 3000
       traefik.http.routers.front.middlewares: authentik
 
 networks:
@@ -129,3 +175,5 @@ networks:
 
 volumes:
   postgres_data:
+  node_modules:
+  dotnuxt:
