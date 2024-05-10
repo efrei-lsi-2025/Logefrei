@@ -1,6 +1,12 @@
 import Elysia from "elysia";
+import { userRegisterPlugin } from "../../middlewares/user-register";
+import { injectStatePlugin } from "../../middlewares/inject-state";
 
-export const SearchService = new Elysia().get(
-  "/",
-  () => "Hello from search service"
-);
+export const SearchService = new Elysia()
+  .use(injectStatePlugin)
+  .use(userRegisterPlugin)
+  .get(
+    "/",
+    ({ user: { name }, store: { service } }) =>
+      `Hello from ${service} service ${name} ! `
+  );

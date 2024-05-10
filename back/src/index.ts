@@ -29,17 +29,7 @@ const main = () => {
       throw new Error("Unknown service");
   }
 
-  new Elysia()
-    .guard(
-      {
-        headers: t.Object({
-          "x-authentik-email": t.String(),
-          "x-authentik-name": t.String(),
-        }),
-      },
-      (app) => app.use(service)
-    )
-    .listen(3000);
+  new Elysia().use(service).listen(3000);
 };
 
 main();

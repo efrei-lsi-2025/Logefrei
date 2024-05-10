@@ -1,6 +1,7 @@
+import Elysia, { t } from "elysia";
 import prisma from "../clients/prisma";
 
-export const createOrGetUser = async (name: string, email: string) => {
+const createOrGetUser = async (name: string, email: string) => {
   const user = await prisma.user.findFirst({
     where: {
       email,
@@ -18,3 +19,17 @@ export const createOrGetUser = async (name: string, email: string) => {
     },
   });
 };
+
+export const userRegisterPlugin = (app: Elysia) =>
+  app.derive(async ({ headers }) => {
+    if (!headers["x-authentik-name"] || !headers["x-authentik-email"]) {
+      return Promise.reject("User not authenticated");
+    }
+    const user = await createOrGetUser(
+      headers["x-authentik-name"],
+      headers["x-authentik-email"]
+    );
+    return {
+      user,
+    };
+  });
