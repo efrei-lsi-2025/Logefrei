@@ -1,6 +1,6 @@
 import Elysia from "elysia";
-import { injectStatePlugin } from "../../middlewares/inject-state";
+import { injectStorePlugin } from "../../middlewares/inject-store";
 
 export const BackgroundService = new Elysia()
-  .use(injectStatePlugin)
+  .use(injectStorePlugin)
   .get("/", () => "Hello from background service");

@@ -1,9 +1,9 @@
 import Elysia from "elysia";
 import { userRegisterPlugin } from "../../middlewares/user-register";
-import { injectStatePlugin } from "../../middlewares/inject-state";
+import { injectStorePlugin } from "../../middlewares/inject-store";
 
 export const UsersService = new Elysia()
-  .use(injectStatePlugin)
+  .use(injectStorePlugin)
   .use(userRegisterPlugin)
   .get(
     "/",
