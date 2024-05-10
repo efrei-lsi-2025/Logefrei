@@ -16,7 +16,6 @@ const {
 
 const main = () => {
   console.log(service);
-  console.log("Hello Elysia");
 
   const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
 };

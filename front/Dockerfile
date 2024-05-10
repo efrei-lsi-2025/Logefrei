@@ -1,18 +1,30 @@
-FROM node:18-alpine3.17 as front-builder
+ARG NODE_IMAGE=oven/bun
 
-WORKDIR /app
+FROM $NODE_IMAGE AS base
+WORKDIR /home/bun/app
 
+FROM base AS install
+
+RUN mkdir -p /temp
+COPY package.json bun.lockb /temp/
+RUN cd /temp && bun install --frozen-lockfile --production
+
+FROM install AS build
+
+COPY --from=install /temp/node_modules /home/bun/app/node_modules
 COPY . .
 
-RUN npm ci && npm run build
+ENV NODE_ENV=production
+RUN bun run build
 
-FROM node:18-alpine3.17 as front-runner
+FROM base AS release
 
-WORKDIR /app
+COPY --chown=bun:bun --from=install /temp/node_modules /home/bun/app/node_modules
+COPY --chown=bun:bun --from=build /home/bun/app/.output .
 
-COPY --from=front-builder /app/.output ./
-EXPOSE 8080
+USER bun
+ENV HOST=0.0.0.0
+ENV NODE_ENV=production
+EXPOSE 3000
 
-ENV HOST=0.0.0.0 PORT=8080 NODE_ENV=production
-
-ENTRYPOINT ["node", "/app/server/index.mjs"]
+ENTRYPOINT [ "bun", "run", "server/index.mjs" ]

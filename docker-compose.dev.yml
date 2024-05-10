@@ -9,7 +9,6 @@ services:
       - "--entrypoints.web.address=:80"
       - "--api.dashboard=true"
       - "--providers.docker.exposedByDefault=false"
-      - "--log.level=TRACE"
       - "--accesslog=true"
     ports:
       - "80:80"
@@ -52,7 +51,9 @@ services:
     restart: always
 
   booking:
-    image: "oven/bun"
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
     entrypoint: []
     command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=booking'
     develop:
@@ -64,6 +65,9 @@ services:
           action: rebuild
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.booking.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/booking`)
@@ -72,7 +76,9 @@ services:
       traefik.http.services.booking.loadbalancer.server.port: 3000
 
   search:
-    image: "oven/bun"
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
     entrypoint: []
     command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=search'
     develop:
@@ -84,6 +90,9 @@ services:
           action: rebuild
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -92,7 +101,9 @@ services:
       traefik.http.services.search.loadbalancer.server.port: 3000
 
   housing:
-    image: "oven/bun"
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
     entrypoint: []
     command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=housing'
     develop:
@@ -104,6 +115,9 @@ services:
           action: rebuild
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.housing.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housing`)
@@ -112,7 +126,9 @@ services:
       traefik.http.services.housing.loadbalancer.server.port: 3000
 
   users:
-    image: "oven/bun"
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
     entrypoint: []
     command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=users'
     develop:
@@ -124,6 +140,9 @@ services:
           action: rebuild
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.users.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/users`)
@@ -132,9 +151,11 @@ services:
       traefik.http.services.users.loadbalancer.server.port: 3000
 
   background:
-    image: "oven/bun"
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
     entrypoint: []
-    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=booking'
+    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=background'
     develop:
       watch:
         - path: ./back
@@ -149,13 +170,10 @@ services:
     build:
       context: ./front
       dockerfile: Dockerfile.dev
-    volumes:
-      - node_modules:/src/node_modules
-      - dotnuxt:/src/.nuxt
     develop:
       watch:
         - path: ./front
-          target: /src
+          target: /home/bun/app
           action: sync
         - path: ./front/package.json
           action: rebuild
@@ -175,5 +193,3 @@ networks:
 
 volumes:
   postgres_data:
-  node_modules:
-  dotnuxt:

@@ -7,7 +7,7 @@ FROM base AS install
 
 RUN mkdir -p /temp
 COPY package.json bun.lockb /temp/
-RUN cd /temp && bun install --frozen-lockfile --production
+RUN cd /temp && bun install --frozen-lockfile
 
 FROM base AS release
 

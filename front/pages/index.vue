@@ -1,1 +1,1 @@
-<template>Coucou lol :)</template>
+<template>Coucou lol :) test</template>

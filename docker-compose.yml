@@ -54,6 +54,9 @@ services:
     command: bun run src/index.ts -- --service=booking
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.booking.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/booking`)
@@ -68,6 +71,9 @@ services:
     command: bun run src/index.ts -- --service=search
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -82,6 +88,9 @@ services:
     command: bun run src/index.ts -- --service=housing
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.housing.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housing`)
@@ -96,6 +105,9 @@ services:
     command: bun run src/index.ts -- --service=users
     networks:
       - backend
+    depends_on:
+      - db
+      - authentik-proxy
     labels:
       traefik.enable: true
       traefik.http.routers.users.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/users`)
