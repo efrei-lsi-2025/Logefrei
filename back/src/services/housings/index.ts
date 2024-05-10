@@ -2,7 +2,7 @@ import Elysia from "elysia";
 import { userRegisterPlugin } from "../../middlewares/user-register";
 import { injectStorePlugin } from "../../middlewares/inject-store";
 
-export const BookingService = new Elysia()
+export const HousingsService = new Elysia()
   .use(injectStorePlugin)
   .use(userRegisterPlugin)
   .get(
