@@ -1,35 +1,19 @@
 import Elysia, { t } from "elysia";
-import { BackgroundService } from "./services/background";
 import { BookingsService } from "./services/bookings";
 import { HousingsService } from "./services/housings";
 import { SearchService } from "./services/search";
 import { UsersService } from "./services/users";
 
-const main = () => {
-  console.log(`🏭 Starting service "${Bun.env.SERVICE}"...`);
-  let service;
+console.log(`🏭 Starting service "${Bun.env.SERVICE}"...`);
 
-  switch (Bun.env.SERVICE) {
-    case "background":
-      service = BackgroundService;
-      break;
-    case "bookings":
-      service = BookingsService;
-      break;
-    case "housings":
-      service = HousingsService;
-      break;
-    case "users":
-      service = UsersService;
-      break;
-    case "search":
-      service = SearchService;
-      break;
-    default:
-      throw new Error("Unknown service");
-  }
+const app = new Elysia()
+  .group("/api", (app) =>
+    app
+      .group("/bookings", (app) => app.use(BookingsService))
+      .group("/housings", (app) => app.use(HousingsService))
+      .group("/users", (app) => app.use(UsersService))
+      .group("/search", (app) => app.use(SearchService))
+  )
+  .listen(3000);
 
-  new Elysia().use(service).listen(3000);
-};
-
-main();
+export type App = typeof app;

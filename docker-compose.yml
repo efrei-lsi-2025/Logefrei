@@ -61,8 +61,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.bookings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/bookings`)
-      traefik.http.middlewares.bookings-strip-prefix.stripprefix.prefixes: /api/bookings
-      traefik.http.routers.bookings.middlewares: authentik,bookings-strip-prefix
+      traefik.http.routers.bookings.middlewares: authentik
       traefik.http.services.booking.loadbalancer.server.port: 3000
 
   search:
@@ -79,8 +78,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
-      traefik.http.middlewares.search-strip-prefix.stripprefix.prefixes: /api/search
-      traefik.http.routers.search.middlewares: authentik,search-strip-prefix
+      traefik.http.routers.search.middlewares: authentik
       traefik.http.services.search.loadbalancer.server.port: 3000
 
   housings:
@@ -97,8 +95,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.housings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housings`)
-      traefik.http.middlewares.housings-strip-prefix.stripprefix.prefixes: /api/housings
-      traefik.http.routers.housings.middlewares: authentik,housings-strip-prefix
+      traefik.http.routers.housings.middlewares: authentik
       traefik.http.services.housings.loadbalancer.server.port: 3000
 
   users:
@@ -115,8 +112,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.users.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/users`)
-      traefik.http.middlewares.users-strip-prefix.stripprefix.prefixes: /api/users
-      traefik.http.routers.users.middlewares: authentik,users-strip-prefix
+      traefik.http.routers.users.middlewares: authentik
       traefik.http.services.users.loadbalancer.server.port: 3000
 
   background:
