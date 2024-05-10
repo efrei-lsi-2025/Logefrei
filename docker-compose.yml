@@ -51,7 +51,7 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=booking
+    command: bun run src/index.ts --service=booking
     networks:
       - backend
     depends_on:
@@ -68,7 +68,7 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=search
+    command: bun run src/index.ts --service=search
     networks:
       - backend
     depends_on:
@@ -85,7 +85,7 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=housing
+    command: bun run src/index.ts --service=housing
     networks:
       - backend
     depends_on:
@@ -102,7 +102,7 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=users
+    command: bun run src/index.ts --service=users
     networks:
       - backend
     depends_on:
@@ -119,7 +119,7 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts -- --service=background
+    command: bun run src/index.ts --service=background
     networks:
       - backend
 
@@ -133,7 +133,7 @@ services:
       traefik.enable: true
       traefik.http.routers.front.rule: Host(`$TRAEFIK_HOST`)
       traefik.http.routers.front.entrypoints: web
-      traefik.http.services.front.loadbalancer.server.port: 8080
+      traefik.http.services.front.loadbalancer.server.port: 3000
       traefik.http.routers.front.middlewares: authentik
 
 networks:
