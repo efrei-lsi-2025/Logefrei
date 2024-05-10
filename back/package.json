@@ -4,7 +4,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "bun run --watch src/index.ts",
-    "start:prod": "prisma migrate deploy && bun run src/index.ts",
+    "start:prod": "bunx prisma migrate deploy && bun run src/index.ts",
     "prisma:dev:env": "cross-env DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres",
     "prisma:dev:migrate": "bun run prisma:dev:env prisma migrate dev",
     "prisma:dev:seed": "bun run prisma:dev:env prisma db seed",

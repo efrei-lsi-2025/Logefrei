@@ -58,6 +58,7 @@ services:
       - authentik-proxy
     environment:
       SERVICE: bookings
+      DATABASE_URL: $DATABASE_URL
     labels:
       traefik.enable: true
       traefik.http.routers.bookings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/bookings`)
@@ -75,6 +76,7 @@ services:
       - authentik-proxy
     environment:
       SERVICE: search
+      DATABASE_URL: $DATABASE_URL
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -92,6 +94,7 @@ services:
       - authentik-proxy
     environment:
       SERVICE: housings
+      DATABASE_URL: $DATABASE_URL
     labels:
       traefik.enable: true
       traefik.http.routers.housings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housings`)
@@ -109,6 +112,7 @@ services:
       - authentik-proxy
     environment:
       SERVICE: users
+      DATABASE_URL: $DATABASE_URL
     labels:
       traefik.enable: true
       traefik.http.routers.users.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/users`)
@@ -121,6 +125,7 @@ services:
       dockerfile: Dockerfile
     environment:
       SERVICE: background
+      DATABASE_URL: $DATABASE_URL
     networks:
       - backend
 
