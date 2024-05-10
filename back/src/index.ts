@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 import { BackgroundService } from "./services/background";
-import { BookingService } from "./services/booking";
-import { HousingService } from "./services/housing";
+import { BookingsService } from "./services/bookings";
+import { HousingsService } from "./services/housings";
 import { SearchService } from "./services/search";
 import { UsersService } from "./services/users";
 
@@ -13,11 +13,11 @@ const main = () => {
     case "background":
       service = BackgroundService;
       break;
-    case "booking":
-      service = BookingService;
+    case "bookings":
+      service = BookingsService;
       break;
-    case "housing":
-      service = HousingService;
+    case "housings":
+      service = HousingsService;
       break;
     case "users":
       service = UsersService;

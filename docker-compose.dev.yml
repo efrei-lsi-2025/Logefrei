@@ -52,7 +52,7 @@ services:
       - backend
     restart: always
 
-  booking:
+  bookings:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
@@ -69,14 +69,14 @@ services:
       - postgres
       - authentik-proxy
     environment:
-      SERVICE: booking
+      SERVICE: bookings
       DATABASE_URL: $DATABASE_URL
     labels:
       traefik.enable: true
-      traefik.http.routers.booking.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/booking`)
-      traefik.http.middlewares.booking-strip-prefix.stripprefix.prefixes: /api/booking
-      traefik.http.routers.booking.middlewares: authentik,booking-strip-prefix
-      traefik.http.services.booking.loadbalancer.server.port: 3000
+      traefik.http.routers.bookings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/bookings`)
+      traefik.http.middlewares.bookings-strip-prefix.stripprefix.prefixes: /api/bookings
+      traefik.http.routers.bookings.middlewares: authentik,bookings-strip-prefix
+      traefik.http.services.bookings.loadbalancer.server.port: 3000
 
   search:
     build:
@@ -104,7 +104,7 @@ services:
       traefik.http.routers.search.middlewares: authentik,search-strip-prefix
       traefik.http.services.search.loadbalancer.server.port: 3000
 
-  housing:
+  housings:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
@@ -118,17 +118,17 @@ services:
     networks:
       - backend
     environment:
-      SERVICE: housing
+      SERVICE: housings
       DATABASE_URL: $DATABASE_URL
     depends_on:
       - postgres
       - authentik-proxy
     labels:
       traefik.enable: true
-      traefik.http.routers.housing.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housing`)
-      traefik.http.middlewares.housing-strip-prefix.stripprefix.prefixes: /api/housing
-      traefik.http.routers.housing.middlewares: authentik,housing-strip-prefix
-      traefik.http.services.housing.loadbalancer.server.port: 3000
+      traefik.http.routers.housings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housings`)
+      traefik.http.middlewares.housings-strip-prefix.stripprefix.prefixes: /api/housings
+      traefik.http.routers.housings.middlewares: authentik,housings-strip-prefix
+      traefik.http.services.housings.loadbalancer.server.port: 3000
 
   users:
     build:
