@@ -34,7 +34,7 @@ services:
     networks:
       - backend
 
-  db:
+  postgres:
     image: postgres:12.2
     volumes:
       - postgres_data:/data/postgres
@@ -55,7 +55,7 @@ services:
     networks:
       - backend
     depends_on:
-      - db
+      - postgres
       - authentik-proxy
     environment:
       SERVICE: booking
@@ -73,7 +73,7 @@ services:
     networks:
       - backend
     depends_on:
-      - db
+      - postgres
       - authentik-proxy
     environment:
       SERVICE: search
@@ -91,7 +91,7 @@ services:
     networks:
       - backend
     depends_on:
-      - db
+      - postgres
       - authentik-proxy
     environment:
       SERVICE: housing
@@ -109,7 +109,7 @@ services:
     networks:
       - backend
     depends_on:
-      - db
+      - postgres
       - authentik-proxy
     environment:
       SERVICE: users

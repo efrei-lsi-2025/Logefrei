@@ -17,6 +17,33 @@
 docker compose -f docker-compose.dev.yml up --watch --build
 ```
 
+5. Once Postgres is up, run `bun run prisma:dev:apply` in the `./back` folder to apply the migrations
+
 ## Usage
 
 The application will be available at http://localhost
+
+## Database Operations
+
+### Migrating the database
+
+Once you made a change to the database schema, you need to create a new migration.
+To do so, your dev environment must be up & you have to run the following command in the `./back` folder:
+
+```bash
+bun run prisma:dev:migrate
+```
+
+The docker compose watcher should automatically restart all the services.
+
+### Open Studio
+
+> ℹ️ Prisma Studio is the official database UI for Prisma. It allows to view & edit the data inside the Postgres database.
+
+To open the Prisma Studio, run the following command in the `./back` folder:
+
+```bash
+bun run prisma:dev:studio
+```
+
+The studio should open itself up in your default browser.

@@ -1,13 +1,21 @@
-ARG NODE_IMAGE=oven/bun
+FROM ubuntu:22.04 AS base
 
-FROM $NODE_IMAGE AS base
+RUN apt-get update && apt-get install -y curl gnupg zip unzip
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
+
+ENV BUN_INSTALL=$HOME/bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH=$PATH:$HOME/bun/bin
+
 WORKDIR /home/bun/app
 
 FROM base AS install
 
 RUN mkdir -p /temp
 COPY package.json bun.lockb /temp/
-COPY prisma/schema.prisma prisma/schema.prisma
+COPY prisma/schema.prisma /temp/prisma/schema.prisma
 RUN cd /temp && bun install --frozen-lockfile --production && bunx prisma generate
 
 FROM base AS release
