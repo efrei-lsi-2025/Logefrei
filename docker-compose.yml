@@ -1,0 +1,114 @@
+services:
+  traefik:
+    image: traefik:latest
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--api.dashboard=true"
+      - "--providers.docker.exposedByDefault=false"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  authentik-proxy:
+    image: ghcr.io/goauthentik/proxy
+    environment:
+      AUTHENTIK_HOST: $AUTHENTIK_HOST
+      AUTHENTIK_INSECURE: "true"
+      AUTHENTIK_TOKEN: $AUTHENTIK_TOKEN
+      AUTHENTIK_DEBUG: "true"
+    labels:
+      traefik.enable: true
+      traefik.port: 9000
+      traefik.http.routers.proxy.rule: PathPrefix(`/outpost.goauthentik.io`)
+      traefik.http.middlewares.authentik.forwardauth.address: http://authentik-proxy:9000/outpost.goauthentik.io/auth/traefik
+      traefik.http.middlewares.authentik.forwardauth.trustForwardHeader: true
+      traefik.http.middlewares.authentik.forwardauth.authResponseHeaders: X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-aut>
+    restart: unless-stopped
+    networks:
+      - backend
+
+  db:
+    image: postgres:12.2
+    volumes:
+      - postgres_data:/data/postgres
+    environment:
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      PGDATA: /data/postgres
+    networks:
+      - backend
+    restart: always
+
+  # booking:
+  #   build:
+  #     context: ./back
+  #     dockerfile: Dockerfile
+  #   command: node index.js -- --service=booking
+  #   networks:
+  #     - backend
+  #   labels:
+  #     traefik.enable: true
+  #     traefik.http.routers.booking.rule: PathPrefix(`/api/booking`)
+  #     traefik.http.routers.search.middlewares: authentik
+  #     traefik.http.services.booking.loadbalancer.server.port: 3000
+
+  # search:
+  #   build:
+  #     context: ./back
+  #     dockerfile: Dockerfile
+  #   command: node index.js -- --service=search
+  #   networks:
+  #     - backend
+  #   labels:
+  #     traefik.enable: true
+  #     traefik.http.routers.search.rule: PathPrefix(`/api/search`)
+  #     traefik.http.routers.search.middlewares: authentik
+  #     traefik.http.services.search.loadbalancer.server.port: 3000
+
+  # housing:
+  #   build:
+  #     context: ./back
+  #     dockerfile: Dockerfile
+  #   command: node index.js -- --service=housing
+  #   networks:
+  #     - backend
+  #   labels:
+  #     traefik.enable: true
+  #     traefik.http.routers.housing.rule: PathPrefix(`/api/housing`)
+  #     traefik.http.routers.housing.middlewares: authentik
+  #     traefik.http.services.housing.loadbalancer.server.port: 3000
+
+  # background:
+  #   build:
+  #     context: ./back
+  #     dockerfile: Dockerfile
+  #   command: node index.js -- --service=background
+  #   networks:
+  #     - backend
+
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    labels:
+      traefik.enable: true
+      traefik.http.routers.front.rule: Host(`localhost`)
+      traefik.http.routers.front.entrypoints: web
+      traefik.http.services.front.loadbalancer.server.port: 8080
+      traefik.http.routers.front.middlewares: authentik
+
+networks:
+  backend:
+
+volumes:
+  postgres_data:
