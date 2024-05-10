@@ -7,7 +7,8 @@ FROM base AS install
 
 RUN mkdir -p /temp
 COPY package.json bun.lockb /temp/
-RUN cd /temp && bun install --frozen-lockfile --production
+COPY prisma/schema.prisma prisma/schema.prisma
+RUN cd /temp && bun install --frozen-lockfile --production && bunx prisma generate
 
 FROM base AS release
 
@@ -19,4 +20,4 @@ ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 EXPOSE 3000
 
-ENTRYPOINT [ "bun", "run", "src/index.ts" ]
+ENTRYPOINT [ "bun", "run", "start:prod" ]

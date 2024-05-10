@@ -57,6 +57,8 @@ services:
     depends_on:
       - db
       - authentik-proxy
+    environment:
+      SERVICE: booking
     labels:
       traefik.enable: true
       traefik.http.routers.booking.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/booking`)
@@ -68,12 +70,13 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts --service=search
     networks:
       - backend
     depends_on:
       - db
       - authentik-proxy
+    environment:
+      SERVICE: search
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -85,12 +88,13 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts --service=housing
     networks:
       - backend
     depends_on:
       - db
       - authentik-proxy
+    environment:
+      SERVICE: housing
     labels:
       traefik.enable: true
       traefik.http.routers.housing.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housing`)
@@ -102,12 +106,13 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts --service=users
     networks:
       - backend
     depends_on:
       - db
       - authentik-proxy
+    environment:
+      SERVICE: users
     labels:
       traefik.enable: true
       traefik.http.routers.users.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/users`)
@@ -119,7 +124,8 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    command: bun run src/index.ts --service=background
+    environment:
+      SERVICE: background
     networks:
       - backend
 

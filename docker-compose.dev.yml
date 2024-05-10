@@ -54,8 +54,6 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
-    entrypoint: []
-    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=booking'
     develop:
       watch:
         - path: ./back
@@ -68,6 +66,8 @@ services:
     depends_on:
       - db
       - authentik-proxy
+    environment:
+      SERVICE: booking
     labels:
       traefik.enable: true
       traefik.http.routers.booking.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/booking`)
@@ -79,8 +79,6 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
-    entrypoint: []
-    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=search'
     develop:
       watch:
         - path: ./back
@@ -93,6 +91,8 @@ services:
     depends_on:
       - db
       - authentik-proxy
+    environment:
+      SERVICE: search
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -104,8 +104,6 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
-    entrypoint: []
-    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=housing'
     develop:
       watch:
         - path: ./back
@@ -115,6 +113,8 @@ services:
           action: rebuild
     networks:
       - backend
+    environment:
+      SERVICE: housing
     depends_on:
       - db
       - authentik-proxy
@@ -129,8 +129,6 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
-    entrypoint: []
-    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=users'
     develop:
       watch:
         - path: ./back
@@ -140,6 +138,8 @@ services:
           action: rebuild
     networks:
       - backend
+    environment:
+      SERVICE: users
     depends_on:
       - db
       - authentik-proxy
@@ -154,8 +154,8 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
-    entrypoint: []
-    command: /bin/sh -c 'bun install && bun run --watch src/index.ts -- --service=background'
+    environment:
+      SERVICE: background
     develop:
       watch:
         - path: ./back

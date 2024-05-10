@@ -3,13 +3,20 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "start:dev": "bun run --watch src/index.ts",
+    "start:prod": "bun run src/index.ts",
+    "prisma:dev:env": "cross-env DATABASE_URL=postgresql://postgres:postgres@postgres:5432/postgres",
+    "prisma:dev:migrate": "bun run prisma:dev:env prisma migrate dev",
+    "prisma:dev:seed": "bun run prisma:dev:env prisma db seed",
+    "prisma:dev:apply": "bun run prisma:dev:env prisma migrate deploy",
+    "prisma:dev:studio": "bun run prisma:dev:env prisma studio"
   },
   "dependencies": {
     "elysia": "latest"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "cross-env": "^7.0.3"
   },
   "module": "src/index.js"
 }
