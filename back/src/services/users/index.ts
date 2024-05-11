@@ -9,4 +9,5 @@ export const UsersService = new Elysia()
     "/",
     ({ user: { name }, store: { service } }) =>
       `Hello from ${service} service ${name} ! `
-  );
+  )
+  .get("/me", ({ user }) => user);

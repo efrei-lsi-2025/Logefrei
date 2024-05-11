@@ -1,10 +1,20 @@
 <script setup lang="ts">
-const { $client } = useNuxtApp();
+import { useUserStore } from "~/stores/user";
 
-const { data } = useAsyncData(async () => {
-  const { data } = await $client.api.users.index.get();
-  return data;
+definePageMeta({
+  name: "Dashboard",
+});
+
+const userStore = useUserStore();
+
+onMounted(() => {
+  userStore.setCurrentUser();
 });
 </script>
 
-<template>Coucou lol :) {{ data }}</template>
+<template>
+  <div>
+    <PagesTitle icon="i-heroicons-home" name="Dashboard" />
+  </div>
+  Salut, comment ça va {{ userStore.user?.name }} ? La forme ? Ca gaze ?
+</template>
