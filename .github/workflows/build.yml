@@ -13,10 +13,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: ghcr.io/${{ github.repository }}-front:latest
+          - image: ghcr.io/${{ github.repository }}-front
             context: ./front
             dockerfile: ./front/Dockerfile
-          - image: ghcr.io/${{ github.repository }}-back:latest
+          - image: ghcr.io/${{ github.repository }}-back
             context: ./back
             dockerfile: ./back/Dockerfile
     steps:
