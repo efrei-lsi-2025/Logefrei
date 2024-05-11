@@ -45,6 +45,8 @@ services:
       PGDATA: /data/postgres
     networks:
       - backend
+    ports:
+      - "5432:5432"
     restart: always
 
   bookings:
