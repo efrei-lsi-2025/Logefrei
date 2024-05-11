@@ -50,9 +50,7 @@ services:
     restart: always
 
   bookings:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    image: ghcr.io/thibclnt/logefrei-back:main
     networks:
       - backend
     depends_on:
@@ -68,9 +66,7 @@ services:
       traefik.http.services.booking.loadbalancer.server.port: 3000
 
   search:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    image: ghcr.io/thibclnt/logefrei-back:main
     networks:
       - backend
     depends_on:
@@ -86,9 +82,7 @@ services:
       traefik.http.services.search.loadbalancer.server.port: 3000
 
   housings:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    image: ghcr.io/thibclnt/logefrei-back:main
     networks:
       - backend
     depends_on:
@@ -104,9 +98,7 @@ services:
       traefik.http.services.housings.loadbalancer.server.port: 3000
 
   users:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    image: ghcr.io/thibclnt/logefrei-back:main
     networks:
       - backend
     depends_on:
@@ -122,9 +114,7 @@ services:
       traefik.http.services.users.loadbalancer.server.port: 3000
 
   background:
-    build:
-      context: ./back
-      dockerfile: Dockerfile
+    image: ghcr.io/thibclnt/logefrei-back:main
     environment:
       SERVICE: background
       DATABASE_URL: $DATABASE_URL
@@ -132,9 +122,7 @@ services:
       - backend
 
   front:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
+    image: ghcr.io/thibclnt/logefrei-front:main
     networks:
       - backend
     labels:
