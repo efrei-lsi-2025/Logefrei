@@ -51,5 +51,7 @@ jobs:
     needs: build-and-push-image
     steps:
       - name: Update Portainer Stack
+        env:
+          PORTAINER_WEBHOOK: ${{ secrets.PORTAINER_WEBHOOK }}
         run: |
-          curl -X POST ${{ secrets.PORTAINER_WEBHOOK }}
+          curl -X POST $PORTAINER_WEBHOOK
