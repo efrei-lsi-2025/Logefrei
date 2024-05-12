@@ -15,4 +15,8 @@ export abstract class HousingsService {
     static async createHousing(housing: HousingCreationDTO): Promise<Housing> {
         return prisma.housing.create({ data: housing });
     }
+
+    static async updateHousing(id: string, housing: Partial<Housing>): Promise<Housing> {
+        return prisma.housing.update({ where: { id }, data: housing });
+    }
 }

@@ -8,10 +8,12 @@ export const HousingsController = new Elysia()
   .use(injectStorePlugin)
   .use(userRegisterPlugin)
   .use(HousingModels)
+
   .get(
     "/",
     async () => await HousingsService.getHousings()
   )
+
   .get(
     "/:id",
     async ({ params }) => {
@@ -24,11 +26,29 @@ export const HousingsController = new Elysia()
       response: "HousingDTO"
     }
   )
+
   .post(
     "/",
     async ({ body }) => await HousingsService.createHousing(body),
     {
       body: "HousingCreationDTO",
+      response: "HousingDTO"
+    }
+  )
+
+  .put(
+    "/:id",
+    async ({ params, body }) => {
+      try {
+        const newHousing = await HousingsService.updateHousing(params.id, body);
+        return newHousing;
+      } catch (RecordNotFound) {
+        throw new NotFoundError(`Housing with id ${params.id} not found`);
+      }
+    },
+    {
+      params: t.Object({ id: t.String() }),
+      body: "HousingUpdateDTO",
       response: "HousingDTO"
     }
   );

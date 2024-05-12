@@ -32,4 +32,11 @@ export const HousingModels = new Elysia()
             description: t.String(),
             ownerId: t.String(),
         }),
+        HousingUpdateDTO: t.Object({
+            rent: t.Optional(t.Number()),
+            address: t.Optional(t.String()),
+            surface: t.Optional(t.Number()),
+            description: t.Optional(t.String()),
+            status: t.Optional(t.Enum(HousingStatus)),
+        }),
     });
