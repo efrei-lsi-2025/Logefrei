@@ -1,37 +1,49 @@
-import { Booking } from '@prisma/client';
+import { Booking, Prisma } from '@prisma/client';
 import prisma from '../../clients/prisma';
 import { BookingCreationDTO } from './models';
-import {
-    InvalidOperationError,
-    RecordNotFoundError,
-    UnauthorizedError
-} from '../../utils/errors';
+import { InvalidOperationError, RecordNotFoundError, UnauthorizedError } from '../../utils/errors';
 
 export abstract class BookingsService {
-    static async getBooking(id: string): Promise<Booking> {
-        const booking = await prisma.booking.findUnique({ where: { id } });
-        if (booking === null)
-            throw new RecordNotFoundError(`Booking with id ${id} not found`);
+    static async getBooking(id: string) {
+        const booking = await prisma.booking.findUnique({
+            where: { id },
+            include: {
+                housing: true,
+                tenant: true
+            }
+        });
+        if (booking === null) throw new RecordNotFoundError(`Booking with id ${id} not found`);
         return booking;
     }
 
-    static async getBookingsForHousing(housingId: string): Promise<Booking[]> {
+    static async getBookingsForHousing(housingId: string) {
         return prisma.booking.findMany({
-            where: { housingId }
+            where: { housingId },
+            include: {
+                housing: true,
+                tenant: true
+            }
         });
     }
 
-    static async getBookingsForUser(userId: string): Promise<Booking[]> {
+    static async getBookingsForUser(userId: string) {
         return prisma.booking.findMany({
-            where: { tenantId: userId }
+            where: { tenantId: userId },
+            include: {
+                housing: true,
+                tenant: true
+            }
         });
     }
 
-    static async createBooking(
-        booking: BookingCreationDTO,
-        tenantId: string
-    ): Promise<Booking> {
-        return prisma.booking.create({ data: { ...booking, tenantId } });
+    static async createBooking(booking: BookingCreationDTO, tenantId: string) {
+        return prisma.booking.create({
+            data: { ...booking, tenantId },
+            include: {
+                housing: true,
+                tenant: true
+            }
+        });
     }
 
     static async cancelBooking(id: string, userId: string) {
@@ -42,18 +54,13 @@ export abstract class BookingsService {
             }
         });
 
-        if (booking === null)
-            throw new RecordNotFoundError(`Booking with id ${id} not found`);
+        if (booking === null) throw new RecordNotFoundError(`Booking with id ${id} not found`);
 
         if (booking.tenantId !== userId && booking.housing.ownerId !== userId)
-            throw new UnauthorizedError(
-                `You are not authorized to cancel this booking`
-            );
+            throw new UnauthorizedError(`You are not authorized to cancel this booking`);
 
         if (booking.status === 'Cancelled' || booking.status === 'Rejected')
-            throw new InvalidOperationError(
-                `Booking is already cancelled or rejected`
-            );
+            throw new InvalidOperationError(`Booking is already cancelled or rejected`);
 
         if (booking.status !== 'Pending' && booking.tenantId === userId)
             throw new InvalidOperationError(
@@ -65,13 +72,15 @@ export abstract class BookingsService {
             booking.housing.ownerId === userId &&
             booking.startDate > new Date()
         )
-            throw new InvalidOperationError(
-                `You cannot cancel a booking that has started`
-            );
+            throw new InvalidOperationError(`You cannot cancel a booking that has started`);
 
         return prisma.booking.update({
             where: { id },
-            data: { status: 'Cancelled' }
+            data: { status: 'Cancelled' },
+            include: {
+                housing: true,
+                tenant: true
+            }
         });
     }
 
@@ -83,21 +92,15 @@ export abstract class BookingsService {
             }
         });
 
-        if (booking === null)
-            throw new RecordNotFoundError(`Booking with id ${id} not found`);
+        if (booking === null) throw new RecordNotFoundError(`Booking with id ${id} not found`);
 
         if (booking.housing.ownerId !== userId)
-            throw new UnauthorizedError(
-                `You are not authorized to accept this booking`
-            );
+            throw new UnauthorizedError(`You are not authorized to accept this booking`);
 
         if (booking.status === 'Cancelled' || booking.status === 'Rejected')
-            throw new InvalidOperationError(
-                `Booking is already cancelled or rejected`
-            );
+            throw new InvalidOperationError(`Booking is already cancelled or rejected`);
 
-        if (booking.status !== 'Pending')
-            throw new InvalidOperationError(`Booking is not pending`);
+        if (booking.status !== 'Pending') throw new InvalidOperationError(`Booking is not pending`);
 
         if (booking.startDate < new Date())
             throw new InvalidOperationError(
@@ -106,7 +109,11 @@ export abstract class BookingsService {
 
         return prisma.booking.update({
             where: { id },
-            data: { status: 'Accepted' }
+            data: { status: 'Accepted' },
+            include: {
+                housing: true,
+                tenant: true
+            }
         });
     }
 
@@ -118,21 +125,15 @@ export abstract class BookingsService {
             }
         });
 
-        if (booking === null)
-            throw new RecordNotFoundError(`Booking with id ${id} not found`);
+        if (booking === null) throw new RecordNotFoundError(`Booking with id ${id} not found`);
 
         if (booking.housing.ownerId !== userId)
-            throw new UnauthorizedError(
-                `You are not authorized to reject this booking`
-            );
+            throw new UnauthorizedError(`You are not authorized to reject this booking`);
 
         if (booking.status === 'Cancelled' || booking.status === 'Rejected')
-            throw new InvalidOperationError(
-                `Booking is already cancelled or rejected`
-            );
+            throw new InvalidOperationError(`Booking is already cancelled or rejected`);
 
-        if (booking.status !== 'Pending')
-            throw new InvalidOperationError(`Booking is not pending`);
+        if (booking.status !== 'Pending') throw new InvalidOperationError(`Booking is not pending`);
 
         if (booking.startDate < new Date())
             throw new InvalidOperationError(
@@ -141,7 +142,11 @@ export abstract class BookingsService {
 
         return prisma.booking.update({
             where: { id },
-            data: { status: 'Rejected' }
+            data: { status: 'Rejected' },
+            include: {
+                housing: true,
+                tenant: true
+            }
         });
     }
 
