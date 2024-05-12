@@ -4,6 +4,8 @@ import { injectStorePlugin } from '../../middlewares/inject-store';
 import { HousingsService } from './service';
 import { HousingModels } from './models';
 import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
+import { BookingsService } from '../bookings/service';
+import { InternalBookingsClient } from '../../clients/microservices';
 
 export const HousingsController = new Elysia()
     .use(injectStorePlugin)
@@ -24,24 +26,12 @@ export const HousingsController = new Elysia()
     })
 
     .get('/', async () => await HousingsService.getHousings(), {
+        response: 'ManyHousingsDTO',
         detail: {
             tags: ['Housings'],
             summary: 'Get all housings'
         }
     })
-
-    .get(
-        '/:id',
-        async ({ params }) => await HousingsService.getHousing(params.id),
-        {
-            params: t.Object({ id: t.String() }),
-            response: 'HousingDTO',
-            detail: {
-                tags: ['Housings'],
-                summary: 'Get a housing by id'
-            }
-        }
-    )
 
     .post('/', async ({ body }) => await HousingsService.createHousing(body), {
         body: 'HousingCreationDTO',
@@ -52,30 +42,49 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .put(
-        '/:id',
-        async ({ params, body }) =>
-            await HousingsService.updateHousing(params.id, body),
-        {
-            params: t.Object({ id: t.String() }),
-            body: 'HousingUpdateDTO',
-            response: 'HousingDTO',
-            detail: {
-                tags: ['Housings'],
-                summary: 'Update a housing'
-            }
-        }
-    )
+    .group('/:housingId', (group) =>
+        group
 
-    .delete(
-        '/:id',
-        async ({ params }) => await HousingsService.deleteHousing(params.id),
-        {
-            params: t.Object({ id: t.String() }),
-            response: 'HousingDTO',
-            detail: {
-                tags: ['Housings'],
-                summary: 'Delete a housing'
-            }
-        }
+            .get(
+                '/',
+                async ({ params: { housingId } }) =>
+                    await HousingsService.getHousing(housingId),
+                {
+                    params: t.Object({ housingId: t.String() }),
+                    response: 'HousingDTO',
+                    detail: {
+                        tags: ['Housings'],
+                        summary: 'Get a housing by id'
+                    }
+                }
+            )
+
+            .put(
+                '/',
+                async ({ params: { housingId }, body }) =>
+                    await HousingsService.updateHousing(housingId, body),
+                {
+                    params: t.Object({ housingId: t.String() }),
+                    body: 'HousingUpdateDTO',
+                    response: 'HousingDTO',
+                    detail: {
+                        tags: ['Housings'],
+                        summary: 'Update a housing'
+                    }
+                }
+            )
+
+            .delete(
+                '/',
+                async ({ params: { housingId } }) =>
+                    await HousingsService.deleteHousing(housingId),
+                {
+                    params: t.Object({ housingId: t.String() }),
+                    response: 'HousingDTO',
+                    detail: {
+                        tags: ['Housings'],
+                        summary: 'Delete a housing'
+                    }
+                }
+            )
     );

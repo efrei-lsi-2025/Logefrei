@@ -4,6 +4,7 @@ import { HousingsController } from './services/housings';
 import { SearchController } from './services/search';
 import { UsersController } from './services/users';
 import swagger from '@elysiajs/swagger';
+import { InternalBookingsController } from './services/bookings/internal';
 
 console.log(`🏭 Starting service "${Bun.env.SERVICE}"...`);
 
@@ -28,7 +29,9 @@ const app = new Elysia()
             .group('/users', (app) => app.use(UsersController))
             .group('/search', (app) => app.use(SearchController))
     )
-    .group('/internal', (app) => app)
-    .listen(3000);
+    .group('/internal', (app) =>
+        app.group('/bookings', (app) => app.use(InternalBookingsController))
+    )
+    .listen(Bun.env.PORT);
 
 export type App = typeof app;

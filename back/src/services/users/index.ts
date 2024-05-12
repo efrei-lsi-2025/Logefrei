@@ -5,6 +5,7 @@ import { injectStorePlugin } from '../../middlewares/inject-store';
 export const UsersController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
+
     .get(
         '/',
         ({ user: { name }, store: { service } }) =>
@@ -16,6 +17,7 @@ export const UsersController = new Elysia()
             }
         }
     )
+
     .get('/me', ({ user }) => user, {
         detail: {
             tags: ['Users'],
