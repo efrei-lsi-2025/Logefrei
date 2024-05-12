@@ -73,8 +73,15 @@ services:
       DATABASE_URL: $DATABASE_URL
     labels:
       traefik.enable: true
+
+      traefik.http.routers.swagger.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/docs`)
+      traefik.http.routers.swagger.middlewares: authentik
+      traefik.http.routers.swagger.service: bookings
+
       traefik.http.routers.bookings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/bookings`)
       traefik.http.routers.bookings.middlewares: authentik
+      traefik.http.routers.bookings.service: bookings
+
       traefik.http.services.bookings.loadbalancer.server.port: 3000
 
   search:

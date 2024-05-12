@@ -8,5 +8,11 @@ export const BookingsController = new Elysia()
     .get(
         '/',
         ({ user: { name }, store: { service } }) =>
-            `Hello from ${service} service ${name} ! `
+            `Hello from ${service} service ${name} ! `,
+        {
+            detail: {
+                tags: ['Bookings'],
+                summary: 'Bookings service'
+            }
+        }
     );

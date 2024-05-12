@@ -23,20 +23,33 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .get('/', async () => await HousingsService.getHousings())
+    .get('/', async () => await HousingsService.getHousings(), {
+        detail: {
+            tags: ['Housings'],
+            summary: 'Get all housings'
+        }
+    })
 
     .get(
         '/:id',
         async ({ params }) => await HousingsService.getHousing(params.id),
         {
             params: t.Object({ id: t.String() }),
-            response: 'HousingDTO'
+            response: 'HousingDTO',
+            detail: {
+                tags: ['Housings'],
+                summary: 'Get a housing by id'
+            }
         }
     )
 
     .post('/', async ({ body }) => await HousingsService.createHousing(body), {
         body: 'HousingCreationDTO',
-        response: 'HousingDTO'
+        response: 'HousingDTO',
+        detail: {
+            tags: ['Housings'],
+            summary: 'Create a housing'
+        }
     })
 
     .put(
@@ -46,7 +59,11 @@ export const HousingsController = new Elysia()
         {
             params: t.Object({ id: t.String() }),
             body: 'HousingUpdateDTO',
-            response: 'HousingDTO'
+            response: 'HousingDTO',
+            detail: {
+                tags: ['Housings'],
+                summary: 'Update a housing'
+            }
         }
     )
 
@@ -55,6 +72,10 @@ export const HousingsController = new Elysia()
         async ({ params }) => await HousingsService.deleteHousing(params.id),
         {
             params: t.Object({ id: t.String() }),
-            response: 'HousingDTO'
+            response: 'HousingDTO',
+            detail: {
+                tags: ['Housings'],
+                summary: 'Delete a housing'
+            }
         }
     );
