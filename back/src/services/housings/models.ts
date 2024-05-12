@@ -14,6 +14,8 @@ const HousingDTO = t.Object({
     updatedAt: t.Date()
 });
 
+const ManyHousingsDTO = t.Array(HousingDTO);
+
 const HousingCreationDTO = t.Object({
     type: t.Enum(HousingType),
     rent: t.Number(),
@@ -34,6 +36,7 @@ const HousingUpdateDTO = t.Object({
 export type HousingCreationDTO = Static<typeof HousingCreationDTO>;
 
 export const HousingModels = new Elysia().model({
+    ManyHousingsDTO,
     HousingDTO,
     HousingCreationDTO,
     HousingUpdateDTO
