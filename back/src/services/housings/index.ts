@@ -5,6 +5,7 @@ import { HousingsService } from './service';
 import { HousingModels } from './models';
 import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
 import { BookingsService } from '../bookings/service';
+import { InternalBookingsClient } from '../../clients/microservices';
 
 export const HousingsController = new Elysia()
     .use(injectStorePlugin)

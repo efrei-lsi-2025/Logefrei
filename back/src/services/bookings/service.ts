@@ -144,4 +144,18 @@ export abstract class BookingsService {
             data: { status: 'Rejected' }
         });
     }
+
+    static async cancelFutureBookings(housingId: string) {
+        return await prisma.booking.updateMany({
+            where: {
+                housingId: housingId,
+                startDate: {
+                    gte: new Date()
+                }
+            },
+            data: {
+                status: 'Cancelled'
+            }
+        });
+    }
 }

@@ -38,7 +38,7 @@ export const BookingsController = new Elysia()
         }
     )
 
-    .group('/by-housing', (group) =>
+    .group('/housings', (group) =>
         group.group('/:housingId', (group) =>
             group.get(
                 '/',
@@ -56,7 +56,7 @@ export const BookingsController = new Elysia()
         )
     )
 
-    .group('/by-user', (group) =>
+    .group('/users', (group) =>
         group.group('/:userId', (group) =>
             group.get(
                 '/',

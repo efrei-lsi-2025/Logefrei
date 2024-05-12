@@ -71,6 +71,7 @@ services:
     environment:
       SERVICE: bookings
       DATABASE_URL: $DATABASE_URL
+      PORT: 3000
     labels:
       traefik.enable: true
 
@@ -103,6 +104,7 @@ services:
     environment:
       SERVICE: search
       DATABASE_URL: $DATABASE_URL
+      PORT: 3000
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -125,6 +127,7 @@ services:
     environment:
       SERVICE: housings
       DATABASE_URL: $DATABASE_URL
+      PORT: 3000
     depends_on:
       - postgres
       - authentik-proxy
@@ -150,6 +153,7 @@ services:
     environment:
       SERVICE: users
       DATABASE_URL: $DATABASE_URL
+      PORT: 3000
     depends_on:
       - postgres
       - authentik-proxy

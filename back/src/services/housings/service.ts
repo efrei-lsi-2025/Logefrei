@@ -2,6 +2,7 @@ import { Housing } from '@prisma/client';
 import prisma from '../../clients/prisma';
 import { HousingCreationDTO } from './models';
 import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
+import { InternalBookingsClient } from '../../clients/microservices';
 
 export abstract class HousingsService {
     static async getHousing(id: string): Promise<Housing> {
@@ -54,16 +55,8 @@ export abstract class HousingsService {
     }
 
     static async cancelFutureBookings(housingId: string) {
-        return await prisma.booking.updateMany({
-            where: {
-                housingId: housingId,
-                startDate: {
-                    gte: new Date()
-                }
-            },
-            data: {
-                status: 'Cancelled'
-            }
-        });
+        return InternalBookingsClient.housings({
+            housingId
+        }).cancelAllFutureBookings.patch();
     }
 }
