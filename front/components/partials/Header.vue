@@ -27,31 +27,26 @@ const isDark = computed({
         />
       </NuxtLink>
 
-      <ClientOnly>
-        <UButton
-          :icon="
-            miscStore.userMenuShown
-              ? 'i-heroicons-arrow-left-on-rectangle'
-              : 'i-heroicons-bars-3'
-          "
-          size="sm"
-          color="gray"
-          variant="ghost"
-          @click="miscStore.toggleUserMenu"
-        />
-        <UButton
-          :icon="
-            isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
-          "
-          color="gray"
-          variant="ghost"
-          aria-label="Theme"
-          @click="isDark = !isDark"
-        />
-        <template #fallback>
-          <div class="w-8 h-8" />
-        </template>
-      </ClientOnly>
+      <UButton
+        :icon="
+          miscStore.userMenuShown
+            ? 'i-heroicons-arrow-left-on-rectangle'
+            : 'i-heroicons-bars-3'
+        "
+        size="sm"
+        color="gray"
+        variant="ghost"
+        @click="miscStore.toggleUserMenu"
+      />
+      <UButton
+        :icon="
+          isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
+        "
+        color="gray"
+        variant="ghost"
+        aria-label="Theme"
+        @click="isDark = !isDark"
+      />
     </div>
     <div class="flex-grow"></div>
     <UsersButton />
