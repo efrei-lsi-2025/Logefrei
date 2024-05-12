@@ -1,5 +1,6 @@
-declare module "bun" {
-  interface Env {
-    SERVICE: "background" | "bookings" | "housings" | "users" | "search";
-  }
+declare module 'bun' {
+    interface Env {
+        SERVICE: 'background' | 'bookings' | 'housings' | 'users' | 'search';
+        PORT: number;
+    }
 }
