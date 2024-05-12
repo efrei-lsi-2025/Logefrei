@@ -14,6 +14,7 @@ const app = new Elysia()
       .group("/users", (app) => app.use(UsersService))
       .group("/search", (app) => app.use(SearchService))
   )
+  .group("/internal", (app) => app)
   .listen(3000);
 
 export type App = typeof app;
