@@ -1,11 +1,12 @@
-<script setup lang="ts">
-definePageMeta({
-  name: "Réservations",
+<script lang="ts" setup>
+onMounted(() => {
+    const router = useRouter();
+    if (router.currentRoute.value.path === '/bookings') {
+        router.push('/bookings/my');
+    }
 });
 </script>
 
 <template>
-  <div>
-    <PagesTitle icon="i-heroicons-calendar" name="Réservations" />
-  </div>
+    <NuxtPage />
 </template>
