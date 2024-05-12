@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sub, format, isSameDay, type Duration } from 'date-fns';
+import { sub, format } from 'date-fns';
 
 const startModel = defineModel('start', {
     default: sub(new Date(), { days: 14 })
