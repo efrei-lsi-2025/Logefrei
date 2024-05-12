@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ElementsFormSlideOver, FormsCreateNewBooking } from '#components';
+
 definePageMeta({
     name: 'Réservations'
 });
@@ -36,23 +38,26 @@ const selected = computed({
         });
     }
 });
+
+const slideover = useSlideover();
+
+const openCreateNewBookingSlideOver = () => {
+    slideover.open(FormsCreateNewBooking, {
+        onClose: slideover.close
+    });
+};
 </script>
 
 <template>
-    <div>
-        <PagesTitle icon="i-heroicons-calendar" name="Réservations">
-            <template #actions>
-                <UButton
-                    color="primary"
-                    icon="i-heroicons-plus"
-                    @click="navigateTo('/bookings/new')"
-                    >Créer une réservation</UButton
-                >
-            </template>
-        </PagesTitle>
+    <PagesTitle icon="i-heroicons-calendar" name="Réservations">
+        <template #actions>
+            <UButton color="primary" icon="i-heroicons-plus" @click="openCreateNewBookingSlideOver"
+                >Créer une réservation</UButton
+            >
+        </template>
+    </PagesTitle>
 
-        <UTabs :items="items" class="w-full" v-model="selected" />
+    <UTabs :items="items" class="w-full" v-model="selected" />
 
-        <NuxtPage />
-    </div>
+    <NuxtPage />
 </template>

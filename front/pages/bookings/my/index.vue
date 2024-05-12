@@ -5,7 +5,7 @@ definePageMeta({
     name: 'Mes réservations'
 });
 
-const { $client } = useNuxtApp();
+const { $client, $listen } = useNuxtApp();
 
 const columns = [
     {
@@ -29,14 +29,18 @@ const columns = [
     }
 ];
 
-const { data } = useAsyncData(async () => {
+const { data, refresh, pending } = useAsyncData(async () => {
     const { data } = await $client.bookings.users.index.get();
     return data;
+});
+
+$listen('data:refresh', () => {
+    refresh();
 });
 </script>
 
 <template>
-    <UTable v-if="data" :columns :rows="data">
+    <UTable v-if="data" :columns :rows="data" :loading="pending">
         <template #housing-data="{ row }">
             <NuxtLink :to="`/housing/${row.housing.id}`">{{ row.housing.address }}</NuxtLink>
         </template>

@@ -21,10 +21,6 @@ const app = new Elysia()
         })
     )
 
-    .onRequest(({ request: {} }) => {
-        console.log('Request received');
-    })
-
     .group('/api', (app) =>
         app
             .group('/bookings', (app) => app.use(BookingsController))
