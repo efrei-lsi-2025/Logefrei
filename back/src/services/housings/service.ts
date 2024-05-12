@@ -4,6 +4,10 @@ import { HousingCreationDTO } from "./models";
 
 export abstract class HousingsService {
 
+    static async getHousing(id: string): Promise<Housing | null> {
+        return prisma.housing.findUnique({ where: { id } });
+    }
+
     static async getHousings(): Promise<Housing[]> {
         return prisma.housing.findMany();
     }
