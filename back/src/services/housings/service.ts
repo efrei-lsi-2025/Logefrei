@@ -1,14 +1,13 @@
-import { Housing, Prisma } from "@prisma/client";
-import prisma from "../../clients/prisma";
-import { HousingCreationDTO } from "./models";
-import { RecordNotFoundError, InvalidOperationError } from "../../utils/errors";
-
+import { Housing } from '@prisma/client';
+import prisma from '../../clients/prisma';
+import { HousingCreationDTO } from './models';
+import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
 
 export abstract class HousingsService {
-
     static async getHousing(id: string): Promise<Housing> {
         const housing = await prisma.housing.findUnique({ where: { id } });
-        if (housing === null) throw new RecordNotFoundError(`Housing with id ${id} not found`);
+        if (housing === null)
+            throw new RecordNotFoundError(`Housing with id ${id} not found`);
         return housing;
     }
 
@@ -20,14 +19,25 @@ export abstract class HousingsService {
         return prisma.housing.create({ data: housing });
     }
 
-    static async updateHousing(id: string, newHousing: Partial<Housing>): Promise<Housing> {
+    static async updateHousing(
+        id: string,
+        newHousing: Partial<Housing>
+    ): Promise<Housing> {
         const housing = await this.getHousing(id);
 
-        if (newHousing.status === "Draft") {
-            if (housing.status === "Occupied") throw new InvalidOperationError("Cannot update an occupied housing to draft");
+        if (newHousing.status === 'Draft') {
+            if (housing.status === 'Occupied')
+                throw new InvalidOperationError(
+                    'Cannot update an occupied housing to draft'
+                );
             await this.cancelFutureBookings(id);
-        } else if (newHousing.status === "Occupied" && housing.status === "Draft") {
-            throw new InvalidOperationError("Cannot update a draft housing to occupied");
+        } else if (
+            newHousing.status === 'Occupied' &&
+            housing.status === 'Draft'
+        ) {
+            throw new InvalidOperationError(
+                'Cannot update a draft housing to occupied'
+            );
         }
 
         return prisma.housing.update({ where: { id }, data: newHousing });
@@ -35,7 +45,10 @@ export abstract class HousingsService {
 
     static async deleteHousing(id: string): Promise<Housing> {
         const housing = await this.getHousing(id);
-        if (housing.status === "Occupied") throw new InvalidOperationError("Cannot delete an occupied housing");
+        if (housing.status === 'Occupied')
+            throw new InvalidOperationError(
+                'Cannot delete an occupied housing'
+            );
         await this.cancelFutureBookings(id);
         return prisma.housing.delete({ where: { id } });
     }
@@ -49,7 +62,7 @@ export abstract class HousingsService {
                 }
             },
             data: {
-                status: "Cancelled"
+                status: 'Cancelled'
             }
         });
     }
