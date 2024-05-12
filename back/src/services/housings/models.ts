@@ -1,22 +1,27 @@
 import { t, Elysia, Static } from 'elysia';
 import { HousingType, HousingStatus } from '@prisma/client';
 
-const HousingDTO = t.Object({
-    id: t.String(),
-    type: t.Enum(HousingType),
-    rent: t.Number(),
-    address: t.String(),
-    surface: t.Number(),
-    description: t.String(),
-    ownerId: t.String(),
-    status: t.Enum(HousingStatus),
-    createdAt: t.Date(),
-    updatedAt: t.Date()
-});
+export const Housing = t.Object(
+    {
+        id: t.String(),
+        type: t.Enum(HousingType),
+        rent: t.Number(),
+        address: t.String(),
+        surface: t.Number(),
+        description: t.String(),
+        ownerId: t.String(),
+        status: t.Enum(HousingStatus),
+        createdAt: t.Date(),
+        updatedAt: t.Date()
+    },
+    {
+        $id: '#/components/schemas/Housing'
+    }
+);
 
-const ManyHousingsDTO = t.Array(HousingDTO);
+export const ManyHousings = t.Array(t.Ref('#/components/schemas/Housing'));
 
-const HousingCreationDTO = t.Object({
+export const HousingCreationDTO = t.Object({
     type: t.Enum(HousingType),
     rent: t.Number(),
     address: t.String(),
@@ -25,7 +30,7 @@ const HousingCreationDTO = t.Object({
     ownerId: t.String()
 });
 
-const HousingUpdateDTO = t.Object({
+export const HousingUpdateDTO = t.Object({
     rent: t.Optional(t.Number()),
     address: t.Optional(t.String()),
     surface: t.Optional(t.Number()),
@@ -35,9 +40,10 @@ const HousingUpdateDTO = t.Object({
 
 export type HousingCreationDTO = Static<typeof HousingCreationDTO>;
 
-export const HousingModels = new Elysia().model({
-    ManyHousingsDTO,
-    HousingDTO,
+export const HousingModels = {
+    Housing,
+    ManyHousings,
+
     HousingCreationDTO,
     HousingUpdateDTO
-});
+};

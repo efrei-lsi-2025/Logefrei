@@ -1,18 +1,27 @@
 import Elysia, { Static, t } from 'elysia';
 
-const BookingDTO = t.Object({
-    id: t.String(),
-    housingId: t.String(),
-    startDate: t.Date(),
-    endDate: t.Date(),
-    tenantId: t.String(),
-    createdAt: t.Date(),
-    updatedAt: t.Date()
+export const Booking = t.Object(
+    {
+        id: t.String(),
+        housingId: t.String(),
+        housing: t.Ref('#/components/schemas/Housing'),
+        startDate: t.Date(),
+        endDate: t.Date(),
+        tenantId: t.String(),
+        tenant: t.Ref('#/components/schemas/User'),
+        createdAt: t.Date(),
+        updatedAt: t.Date()
+    },
+    {
+        $id: '#/components/schemas/Booking'
+    }
+);
+
+export const ManyBookings = t.Array(t.Ref('#/components/schemas/Booking'), {
+    $id: '#/components/schemas/ManyBookings'
 });
 
-const ManyBookingsDTO = t.Array(BookingDTO);
-
-const BookingCreationDTO = t.Object({
+export const BookingCreationDTO = t.Object({
     housingId: t.String(),
     startDate: t.Date(),
     endDate: t.Date()
@@ -20,8 +29,8 @@ const BookingCreationDTO = t.Object({
 
 export type BookingCreationDTO = Static<typeof BookingCreationDTO>;
 
-export const BookingModels = new Elysia().model({
-    ManyBookingsDTO,
-    BookingCreationDTO,
-    BookingDTO
-});
+export const BookingModels = {
+    Booking,
+    ManyBookings,
+    BookingCreationDTO
+};

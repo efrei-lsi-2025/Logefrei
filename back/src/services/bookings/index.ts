@@ -2,14 +2,13 @@ import Elysia, { t } from 'elysia';
 import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
 import { BookingsService } from './service';
-import { BookingModels } from './models';
 import { InvalidOperationError, RecordNotFoundError } from '../../utils/errors';
+import { injectModelsPlugin } from '../../middlewares/inject-models';
 
 export const BookingsController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
-
-    .use(BookingModels)
+    .use(injectModelsPlugin)
 
     .error({
         RecordNotFoundError,
@@ -26,11 +25,12 @@ export const BookingsController = new Elysia()
 
     .post(
         '/',
-        async ({ body, user: { id: userId } }) =>
-            await BookingsService.createBooking(body, userId),
+        async ({ body, user: { id: userId } }) => await BookingsService.createBooking(body, userId),
         {
             body: 'BookingCreationDTO',
-            response: 'BookingDTO',
+            response: {
+                200: 'Booking'
+            },
             detail: {
                 tags: ['Bookings'],
                 summary: 'Create a booking'
@@ -46,7 +46,9 @@ export const BookingsController = new Elysia()
                     await BookingsService.getBookingsForHousing(housingId),
                 {
                     params: t.Object({ housingId: t.String() }),
-                    response: 'ManyBookingsDTO',
+                    response: {
+                        200: 'ManyBookings'
+                    },
                     detail: {
                         tags: ['Bookings'],
                         summary: 'Get bookings for a housing'
@@ -57,32 +59,47 @@ export const BookingsController = new Elysia()
     )
 
     .group('/users', (group) =>
-        group.group('/:userId', (group) =>
-            group.get(
+        group
+            .get(
                 '/',
-                async ({ params: { userId } }) =>
+                async ({ user: { id: userId } }) =>
                     await BookingsService.getBookingsForUser(userId),
                 {
+                    response: {
+                        200: 'ManyBookings'
+                    },
+                    detail: {
+                        tags: ['Bookings'],
+                        summary: 'Get all bookings of the current user'
+                    }
+                }
+            )
+            .get(
+                '/:userId',
+                async ({ params: { userId } }) => await BookingsService.getBookingsForUser(userId),
+                {
                     params: t.Object({ userId: t.String() }),
-                    response: 'ManyBookingsDTO',
+                    response: {
+                        200: 'ManyBookings'
+                    },
                     detail: {
                         tags: ['Bookings'],
                         summary: 'Get bookings for a user'
                     }
                 }
             )
-        )
     )
 
     .group('/:bookingId', (group) =>
         group
             .get(
                 '/',
-                async ({ params: { bookingId } }) =>
-                    await BookingsService.getBooking(bookingId),
+                async ({ params: { bookingId } }) => await BookingsService.getBooking(bookingId),
                 {
                     params: t.Object({ bookingId: t.String() }),
-                    response: 'BookingDTO',
+                    response: {
+                        200: 'Booking'
+                    },
                     detail: {
                         tags: ['Bookings'],
                         summary: 'Get a booking by id'
@@ -95,6 +112,9 @@ export const BookingsController = new Elysia()
                     await BookingsService.cancelBooking(bookingId, userId),
                 {
                     params: t.Object({ bookingId: t.String() }),
+                    response: {
+                        200: 'Booking'
+                    },
                     detail: {
                         tags: ['Bookings'],
                         summary: 'Cancel a booking'
@@ -107,6 +127,9 @@ export const BookingsController = new Elysia()
                     await BookingsService.acceptBooking(bookingId, userId),
                 {
                     params: t.Object({ bookingId: t.String() }),
+                    response: {
+                        200: 'Booking'
+                    },
                     detail: {
                         tags: ['Bookings'],
                         summary: 'Accept a booking'
@@ -119,6 +142,9 @@ export const BookingsController = new Elysia()
                     await BookingsService.rejectBooking(bookingId, userId),
                 {
                     params: t.Object({ bookingId: t.String() }),
+                    response: {
+                        200: 'Booking'
+                    },
                     detail: {
                         tags: ['Bookings'],
                         summary: 'Reject a booking'
