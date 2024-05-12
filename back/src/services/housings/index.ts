@@ -1,13 +1,27 @@
-import { t, Elysia, error, NotFoundError } from "elysia";
+import { t, Elysia, NotFoundError } from "elysia";
 import { userRegisterPlugin } from "../../middlewares/user-register";
 import { injectStorePlugin } from "../../middlewares/inject-store";
 import { HousingsService } from "./service";
 import { HousingModels } from "./models";
+import { RecordNotFoundError, InvalidOperationError } from "../../utils/errors";
 
 export const HousingsController = new Elysia()
   .use(injectStorePlugin)
   .use(userRegisterPlugin)
   .use(HousingModels)
+
+  .error({
+    RecordNotFoundError,
+    InvalidOperationError
+  })
+  .onError(({ code, error }) => {
+    switch (code) {
+      case "RecordNotFoundError":
+        return new Response(error.message, { status: 404 });
+      case "InvalidOperationError":
+        return new Response(error.message, { status: 400 });
+    }
+  })
 
   .get(
     "/",
@@ -16,11 +30,7 @@ export const HousingsController = new Elysia()
 
   .get(
     "/:id",
-    async ({ params }) => {
-      const housing = await HousingsService.getHousing(params.id);
-      if (!housing) throw new NotFoundError(`Housing with id ${params.id} not found`);
-      return housing;
-    },
+    async ({ params }) => await HousingsService.getHousing(params.id),
     {
       params: t.Object({ id: t.String() }),
       response: "HousingDTO"
@@ -38,17 +48,19 @@ export const HousingsController = new Elysia()
 
   .put(
     "/:id",
-    async ({ params, body }) => {
-      try {
-        const newHousing = await HousingsService.updateHousing(params.id, body);
-        return newHousing;
-      } catch (RecordNotFound) {
-        throw new NotFoundError(`Housing with id ${params.id} not found`);
-      }
-    },
+    async ({ params, body }) => await HousingsService.updateHousing(params.id, body),
     {
       params: t.Object({ id: t.String() }),
       body: "HousingUpdateDTO",
+      response: "HousingDTO"
+    }
+  )
+
+  .delete(
+    "/:id",
+    async ({ params }) => await HousingsService.deleteHousing(params.id),
+    {
+      params: t.Object({ id: t.String() }),
       response: "HousingDTO"
     }
   );

@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-   binaryTargets = ["native", "debian-openssl-1.1.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -12,17 +12,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  
-  phone     String?
-  address   String?
+  id    String @id @default(cuid())
+  email String @unique
+  name  String
 
-  isAdmin   Boolean  @default(false)
+  phone   String?
+  address String?
 
-  housings  Housing[]
-  bookings  Booking[]
+  isAdmin Boolean @default(false)
+
+  housings Housing[]
+  bookings Booking[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -40,19 +40,19 @@ enum HousingStatus {
 }
 
 model Housing {
-  id        String   @id @default(cuid())
-  type      HousingType
-  rent      Float
-  address   String
-  surface   Int
+  id          String      @id @default(cuid())
+  type        HousingType
+  rent        Float
+  address     String
+  surface     Int
   description String
 
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   String
-  
-  status    HousingStatus @default(Draft)
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String
 
-  bookings  Booking[]
+  status HousingStatus @default(Draft)
+
+  bookings Booking[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -70,13 +70,13 @@ model Booking {
   startDate DateTime
   endDate   DateTime
 
-  housing   Housing  @relation(fields: [housingId], references: [id])
-  housingId String
+  housing   Housing? @relation(fields: [housingId], references: [id], onDelete: SetNull)
+  housingId String?
 
-  tenant    User     @relation(fields: [tenantId], references: [id])
-  tenantId  String
+  tenant   User   @relation(fields: [tenantId], references: [id])
+  tenantId String
 
-  status   BookingStatus @default(Pending)
+  status BookingStatus @default(Pending)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
