@@ -12,7 +12,6 @@ export const useUserStore = defineStore({
             user: Awaited<typeof user>['data'];
         };
     },
-    persist: true,
     actions: {
         async fetchCurrentUser() {
             const { $client } = useNuxtApp();
