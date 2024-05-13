@@ -13,6 +13,10 @@ const items = [
     {
         key: 'my-housings-bookings',
         label: 'Réservations de mes hébergements'
+    },
+    {
+        key: 'calendar',
+        label: 'Calendrier'
     }
 ];
 
