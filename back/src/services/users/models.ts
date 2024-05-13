@@ -1,4 +1,4 @@
-import Elysia, { t } from 'elysia';
+import Elysia, { Static, t } from 'elysia';
 import { ParametrizedRef } from '../../utils/typebox';
 
 export const User = t.Object(
@@ -21,7 +21,15 @@ export type UserSchema = typeof User;
 
 const ManyUsers = t.Array(ParametrizedRef<typeof User>('#/components/schemas/User'));
 
+export const UserUpdateDTO = t.Object({
+    phone: t.Optional(t.String()),
+    address: t.Optional(t.String())
+});
+
+export type UserUpdateDTO = Static<typeof UserUpdateDTO>;
+
 export const UserModels = {
     ManyUsers,
+    UserUpdateDTO,
     User
 };

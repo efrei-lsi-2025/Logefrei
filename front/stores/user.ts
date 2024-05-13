@@ -14,7 +14,7 @@ export const useUserStore = defineStore({
     },
     persist: true,
     actions: {
-        async setCurrentUser() {
+        async fetchCurrentUser() {
             const { $client } = useNuxtApp();
             const { data } = await $client.users.me.get();
 
