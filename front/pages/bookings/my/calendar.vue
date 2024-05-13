@@ -88,10 +88,14 @@ const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
 
 .booking-slot {
     @apply rounded-lg shadow-sm border-none mb-1 p-1 !important;
+
+    .fc-event-main-frame {
+        @apply dark:text-gray-900 !important;
+    }
 }
 
 .booking-status-accepted {
-    @apply bg-green-500 !important;
+    @apply bg-green-500 dark:text-gray-900 !important;
 }
 
 .booking-status-pending {
