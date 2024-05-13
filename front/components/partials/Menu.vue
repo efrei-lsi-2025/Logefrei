@@ -19,11 +19,6 @@ const links = [
         label: 'Recherche',
         icon: 'i-heroicons-magnifying-glass',
         to: '/search'
-    },
-    {
-        label: 'Utilisateurs',
-        icon: 'i-heroicons-user',
-        to: '/users'
     }
 ];
 </script>
