@@ -28,6 +28,8 @@ const {
     pending: pendingHousings,
     refresh: refreshHousings
 } = useAsyncData(async () => {
+    console.log('Fetching housings');
+
     const { data } = await $client.search.housings.date.get({
         query: {
             startDate: state.startDate,
@@ -64,7 +66,7 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
                 <ElementsDateRangePicker
                     v-model:start="state.startDate"
                     v-model:end="state.endDate"
-                    @change="() => refreshHousings"
+                    @change="() => refreshHousings()"
                 />
             </UFormGroup>
 

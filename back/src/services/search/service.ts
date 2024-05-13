@@ -8,21 +8,26 @@ export abstract class SearchService {
     ): Promise<Housing[]> {
         return prisma.housing.findMany({
             where: {
-                NOT: {
-                    bookings: {
-                        some: {
-                            OR: [
-                                {
-                                    startDate: { gte: startDate },
-                                    endDate: { lte: endDate }
+                bookings: {
+                    none: {
+                        OR: [
+                            {
+                                startDate: {
+                                    lte: startDate
                                 },
-                                {
-                                    startDate: { lte: startDate },
-                                    endDate: { gte: endDate }
+                                endDate: {
+                                    gte: startDate
                                 }
-                            ],
-                            status: 'Accepted'
-                        }
+                            },
+                            {
+                                startDate: {
+                                    lte: endDate
+                                },
+                                endDate: {
+                                    gte: endDate
+                                }
+                            }
+                        ]
                     }
                 }
             }
