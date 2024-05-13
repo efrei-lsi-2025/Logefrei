@@ -1,5 +1,6 @@
 import { t, Elysia, Static } from 'elysia';
 import { HousingType, HousingStatus } from '@prisma/client';
+import { ParametrizedRef } from '../../utils/typebox';
 
 export const Housing = t.Object(
     {
@@ -19,7 +20,11 @@ export const Housing = t.Object(
     }
 );
 
-export const ManyHousings = t.Array(t.Ref('#/components/schemas/Housing'));
+export type HousingSchema = typeof Housing;
+
+export const ManyHousings = t.Array(
+    ParametrizedRef<typeof Housing>('#/components/schemas/Housing')
+);
 
 export const HousingCreationDTO = t.Object({
     type: t.Enum(HousingType),

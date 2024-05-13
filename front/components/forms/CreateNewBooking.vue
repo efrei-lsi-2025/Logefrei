@@ -16,6 +16,7 @@ const schema = z.object({
 });
 
 type Form = z.infer<typeof schema>;
+const form = ref();
 
 const state = reactive({
     housingId: null,
@@ -59,16 +60,26 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
 
 <template>
     <ElementsFormSlideOver title="Créer une réservation" @close="emit('close')">
-        <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-            <UFormGroup label="Dates">
+        <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit" ref="form">
+            <UFormGroup
+                label="Dates"
+                required
+                description="Sélectionnez les dates de début et de fin de la réservation"
+            >
                 <ElementsDateRangePicker
                     v-model:start="state.startDate"
                     v-model:end="state.endDate"
-                    @change="() => refreshHousings"
+                    @change="() => refreshHousings()"
                 />
             </UFormGroup>
 
-            <UFormGroup label="Hébergement" name="housingId">
+            <UFormGroup
+                label="Hébergement"
+                name="housingId"
+                required
+                help="Seuls les hébergements disponibles aux dates données sont affichés"
+                :error="!state.housingId ? 'Veuillez choisir un hébergement' : ''"
+            >
                 <USelectMenu
                     v-model="state.housingId"
                     :options="housings"
@@ -82,10 +93,12 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
                     value-attribute="id"
                 />
             </UFormGroup>
-
-            <UButton color="primary" type="submit" :loading="submitting"
-                >Créer la réservation</UButton
-            >
         </UForm>
+
+        <template #submit>
+            <UButton color="primary" :loading="submitting" @click="() => form.submit()">
+                Créer la réservation
+            </UButton>
+        </template>
     </ElementsFormSlideOver>
 </template>

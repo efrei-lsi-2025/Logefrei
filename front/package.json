@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@elysiajs/eden": "^1.0.13",
+    "@fullcalendar/core": "^6.1.11",
+    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/interaction": "^6.1.11",
+    "@fullcalendar/vue3": "^6.1.11",
     "@nuxt/ui": "^2.16.0",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@pinia/nuxt": "^0.5.1",
