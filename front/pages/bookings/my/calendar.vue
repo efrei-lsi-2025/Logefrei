@@ -2,7 +2,6 @@
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-
 import frLocale from '@fullcalendar/core/locales/fr';
 import type { CalendarOptions } from '@fullcalendar/core/index.js';
 
@@ -26,25 +25,6 @@ $listen('data:refresh', () => {
     refresh();
 });
 
-const bookingStatusColor: Record<string, { color: string; textColor: string }> = {
-    Accepted: {
-        color: '#10B981',
-        textColor: 'white'
-    },
-    Pending: {
-        color: '#F59E0B',
-        textColor: 'white'
-    },
-    Rejected: {
-        color: '#EF4444',
-        textColor: 'white'
-    },
-    Canceled: {
-        color: '#6B7280',
-        textColor: 'white'
-    }
-};
-
 const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
@@ -57,8 +37,7 @@ const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
             title: `(Moi) ${booking.housing.address}`,
             start: booking.startDate,
             end: booking.endDate,
-            color: bookingStatusColor[booking.status].color,
-            textColor: bookingStatusColor[booking.status].textColor
+            classNames: [`booking-status-${booking.status.toLowerCase()}`, 'booking-slot']
         })) ?? [])
     ],
     eventClick: function (info: any) {
@@ -96,10 +75,34 @@ const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
     @apply text-gray-700 dark:text-gray-200 !important;
 }
 
+.fc-col-header-cell-cushion {
+    @apply font-semibold !important;
+}
+
 .fc-daygrid-day,
 .fc-theme-standard td,
 .fc-theme-standard th,
 .fc-theme-standard .fc-scrollgrid {
     @apply border-gray-300 dark:border-gray-700 !important;
+}
+
+.booking-slot {
+    @apply rounded-lg shadow-sm border-none mb-1 p-1 !important;
+}
+
+.booking-status-accepted {
+    @apply bg-green-500 !important;
+}
+
+.booking-status-pending {
+    @apply bg-yellow-500 !important;
+}
+
+.booking-status-rejected {
+    @apply bg-red-500 !important;
+}
+
+.booking-status-canceled {
+    @apply bg-red-500 !important;
 }
 </style>
