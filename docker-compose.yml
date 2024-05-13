@@ -60,6 +60,8 @@ services:
       SERVICE: bookings
       DATABASE_URL: $DATABASE_URL
       PORT: 3000
+    deploy:
+      replicas: 2
     labels:
       traefik.enable: true
       traefik.http.routers.bookings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/bookings`)
@@ -77,6 +79,8 @@ services:
       SERVICE: search
       DATABASE_URL: $DATABASE_URL
       PORT: 3000
+    deploy:
+      replicas: 2
     labels:
       traefik.enable: true
       traefik.http.routers.search.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/search`)
@@ -94,6 +98,8 @@ services:
       SERVICE: housings
       DATABASE_URL: $DATABASE_URL
       PORT: 3000
+    deploy:
+      replicas: 2
     labels:
       traefik.enable: true
       traefik.http.routers.housings.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/housings`)
@@ -111,6 +117,8 @@ services:
       SERVICE: users
       DATABASE_URL: $DATABASE_URL
       PORT: 3000
+    deploy:
+      replicas: 2
     labels:
       traefik.enable: true
       traefik.http.routers.users.rule: Host(`$TRAEFIK_HOST`) && PathPrefix(`/api/users`)
@@ -129,6 +137,8 @@ services:
     image: ghcr.io/logefrei/logefrei-front:main
     networks:
       - backend
+    deploy:
+      replicas: 2
     labels:
       traefik.enable: true
       traefik.http.routers.front.rule: Host(`$TRAEFIK_HOST`)
