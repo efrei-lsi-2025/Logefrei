@@ -34,6 +34,13 @@ const emit = defineEmits<{
             <div class="flex-1">
                 <slot @close="emit('close')" />
             </div>
+
+            <template #footer>
+                <div class="flex justify-end space-x-4">
+                    <UButton color="gray" variant="ghost" @click="emit('close')">Annuler</UButton>
+                    <slot name="submit" />
+                </div>
+            </template>
         </UCard>
     </USlideover>
 </template>
