@@ -1,4 +1,4 @@
-import { t, Elysia, Static } from 'elysia';
+import { t, Static } from 'elysia';
 import { HousingType, HousingStatus } from '@prisma/client';
 import { ParametrizedRef } from '../../utils/typebox';
 

@@ -45,6 +45,25 @@ export const HousingsController = new Elysia()
         }
     })
 
+    .group('/users', (group) =>
+        group.group('/:userId', (group) =>
+            group.get(
+                '/',
+                async ({ params: { userId } }) => await HousingsService.getHousingsForUser(userId),
+                {
+                    params: t.Object({ userId: t.String() }),
+                    response: {
+                        200: ManyHousings
+                    },
+                    detail: {
+                        tags: ['Housings'],
+                        summary: 'Get housings owned by a user'
+                    }
+                }
+            )
+        )
+    )
+
     .group('/:housingId', (group) =>
         group
 
