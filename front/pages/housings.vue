@@ -1,11 +1,63 @@
 <script setup lang="ts">
 definePageMeta({
-  name: "Hébergements",
+    name: 'Mes hébergements'
+});
+
+const { $client, $listen } = useNuxtApp();
+
+const columns = [
+    {
+        key: 'address',
+        label: 'Adresse'
+    },
+    {
+        key: 'type',
+        label: 'Type'
+    },
+    {
+        key: 'surface',
+        label: 'Surface'
+    },
+    {
+        key: 'rent',
+        label: 'Loyer'
+    },
+    {
+        key: 'status',
+        label: 'Statut'
+    }
+];
+
+const { data, refresh, pending } = useAsyncData(async () => {
+    const { data } = await $client.housings.users.index.get();
+    return data;
+});
+
+$listen('data:refresh:housings', () => {
+    refresh();
 });
 </script>
 
 <template>
-  <div>
-    <PagesTitle icon="i-heroicons-home-modern" name="Hébergements" />
-  </div>
+    <div>
+        <PagesTitle icon="i-heroicons-home-modern" name="Mes hébergements"> </PagesTitle>
+
+        <UTable v-if="data" :columns :rows="data" :loading="pending">
+            <template #address-data="{ row }">
+                <NuxtLink :to="`/housing/${row.id}`">{{ row.address }}</NuxtLink>
+            </template>
+
+            <template #type-data="{ row }">
+                <ElementsBookingTypeIcon :type="row.type" />
+            </template>
+
+            <template #surface-data="{ row }"> {{ row.surface }} m² </template>
+
+            <template #rent-data="{ row }"> {{ row.rent }} € </template>
+
+            <template #status-data="{ row }">
+                <ElementsHousingStatusBadge :status="row.status" />
+            </template>
+        </UTable>
+    </div>
 </template>

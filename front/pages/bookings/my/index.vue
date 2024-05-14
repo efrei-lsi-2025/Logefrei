@@ -54,7 +54,7 @@ $listen('data:refresh', () => {
         </template>
 
         <template #status-data="{ row }">
-            <ElementsStatusBadge :status="row.status" />
+            <ElementsBookingStatusBadge :status="row.status" />
         </template>
 
         <template #actions-data="{ row }">
