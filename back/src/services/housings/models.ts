@@ -1,4 +1,4 @@
-import { t, Elysia, Static } from 'elysia';
+import { t, Static } from 'elysia';
 import { HousingType, HousingStatus } from '@prisma/client';
 import { ParametrizedRef } from '../../utils/typebox';
 
@@ -32,7 +32,6 @@ export const HousingCreationDTO = t.Object({
     address: t.String(),
     surface: t.Number(),
     description: t.String(),
-    ownerId: t.String()
 });
 
 export const HousingUpdateDTO = t.Object({

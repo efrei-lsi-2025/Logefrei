@@ -1,7 +1,8 @@
 import mitt from 'mitt';
 
 type Events = {
-    'data:refresh': void;
+    'data:refresh:bookings': void;
+    'data:refresh:housings': void;
 };
 
 export default defineNuxtPlugin(() => {

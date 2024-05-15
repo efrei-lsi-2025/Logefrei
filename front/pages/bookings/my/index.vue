@@ -34,7 +34,7 @@ const { data, refresh, pending } = useAsyncData(async () => {
     return data;
 });
 
-$listen('data:refresh', () => {
+$listen('data:refresh:bookings', () => {
     refresh();
 });
 </script>
@@ -54,7 +54,7 @@ $listen('data:refresh', () => {
         </template>
 
         <template #status-data="{ row }">
-            <ElementsStatusBadge :status="row.status" />
+            <ElementsBookingStatusBadge :status="row.status" />
         </template>
 
         <template #actions-data="{ row }">

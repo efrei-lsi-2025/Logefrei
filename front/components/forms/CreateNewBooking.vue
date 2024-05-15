@@ -52,7 +52,7 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
         color: 'green'
     });
 
-    $event('data:refresh');
+    $event('data:refresh:bookings');
     emit('close');
     submitting.value = false;
 };

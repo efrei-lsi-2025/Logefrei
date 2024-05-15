@@ -6,6 +6,11 @@ const links = [
         to: '/'
     },
     {
+        label: 'Recherche',
+        icon: 'i-heroicons-magnifying-glass',
+        to: '/search'
+    },
+    {
         label: 'Réservations',
         icon: 'i-heroicons-calendar',
         to: '/bookings'
@@ -14,11 +19,6 @@ const links = [
         label: 'Hébergements',
         icon: 'i-heroicons-home-modern',
         to: '/housings'
-    },
-    {
-        label: 'Recherche',
-        icon: 'i-heroicons-magnifying-glass',
-        to: '/search'
     }
 ];
 </script>
