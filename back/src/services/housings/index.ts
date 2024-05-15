@@ -34,7 +34,7 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .post('/', async ({ body }) => await HousingsService.createHousing(body), {
+    .post('/', async ({ body, user: { id: userId } }) => await HousingsService.createHousing(body, userId), {
         body: 'HousingCreationDTO',
         response: {
             200: 'Housing'

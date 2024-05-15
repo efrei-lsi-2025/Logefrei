@@ -1,13 +1,15 @@
 <script setup lang="ts">
-const { type } = defineProps<{
-    type: 'House' | 'Appartment';
+const props = defineProps<{
+    type: 'House' | 'Apartment';
 }>();
 
+const type = toRef(props, 'type');
+
 const name = computed(() => {
-    switch (type) {
+    switch (type.value) {
         case 'House':
             return 'i-heroicons-home';
-        case 'Appartment':
+        case 'Apartment':
             return 'i-heroicons-building-office-2';
     }
 });

@@ -32,7 +32,6 @@ export const HousingCreationDTO = t.Object({
     address: t.String(),
     surface: t.Number(),
     description: t.String(),
-    ownerId: t.String()
 });
 
 export const HousingUpdateDTO = t.Object({

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ElementsFormSlideOver, FormsCreateNewHousing } from '#components';
+
 definePageMeta({
     name: 'Mes hébergements'
 });
@@ -16,11 +18,11 @@ const columns = [
     },
     {
         key: 'surface',
-        label: 'Surface'
+        label: 'Surface (m²)'
     },
     {
         key: 'rent',
-        label: 'Loyer'
+        label: 'Loyer (€ / nuit)'
     },
     {
         key: 'status',
@@ -36,11 +38,28 @@ const { data, refresh, pending } = useAsyncData(async () => {
 $listen('data:refresh:housings', () => {
     refresh();
 });
+
+const slideover = useSlideover();
+
+const openCreateNewHousingSlideOver = () => {
+    slideover.open(FormsCreateNewHousing, {
+        onClose: slideover.close
+    });
+};
 </script>
 
 <template>
     <div>
-        <PagesTitle icon="i-heroicons-home-modern" name="Mes hébergements"> </PagesTitle>
+        <PagesTitle icon="i-heroicons-home-modern" name="Mes hébergements">
+            <template #actions>
+                <UButton
+                    color="primary"
+                    icon="i-heroicons-plus"
+                    @click="openCreateNewHousingSlideOver"
+                    >Créer un hébergement</UButton
+                >
+            </template>
+        </PagesTitle>
 
         <UTable v-if="data" :columns :rows="data" :loading="pending">
             <template #address-data="{ row }">
