@@ -55,7 +55,7 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
 </script>
 
 <template>
-    <ElementsFormSlideOver title="Créer une réservation" @close="emit('close')">
+    <ElementsFormSlideOver title="Créer un hébergement" @close="emit('close')">
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit" ref="form">
             <UFormGroup label="Type" required description="Sélectionnez le type de bien">
                 <USelectMenu
