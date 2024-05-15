@@ -34,7 +34,7 @@ const { data, refresh, pending } = useAsyncData(async () => {
     return data;
 });
 
-$listen('data:refresh', () => {
+$listen('data:refresh:bookings', () => {
     refresh();
 });
 </script>

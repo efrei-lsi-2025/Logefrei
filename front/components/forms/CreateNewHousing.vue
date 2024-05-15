@@ -15,23 +15,25 @@ const typeOptions = [
     { value: 'Apartment', label: 'Appartement' }
 ];
 
+const requiredError = { required_error: 'Champ requis' };
+
 const schema = z.object({
-    address: z.string(),
+    address: z.string(requiredError),
     type: z.enum(['House', 'Apartment']),
-    description: z.string(),
-    surface: z.number().positive('La surface doit être un nombre positif.'),
-    rent: z.number().positive('Le loyer doit être un nombre positif.')
+    description: z.string(requiredError),
+    surface: z.number(requiredError).positive('La surface doit être un nombre positif.'),
+    rent: z.number(requiredError).positive('Le loyer doit être un nombre positif.')
 });
 
 type Form = z.infer<typeof schema>;
 const form = ref();
 
-const state = reactive({
-    address: null as string | null,
-    type: 'House' as 'House' | 'Apartment',
-    description: null as string | null,
-    surface: null as number | null,
-    rent: null as number | null
+const state: Partial<Form> = reactive({
+    address: undefined,
+    type: 'House',
+    description: undefined,
+    surface: undefined,
+    rent: undefined
 });
 
 const submitting = ref(false);
@@ -72,6 +74,7 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
 
             <UFormGroup
                 label="Adresse complète"
+                name="address"
                 required
                 description="Saisissez l'adresse complète du bien"
             >
@@ -80,18 +83,29 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
 
             <UFormGroup
                 label="Description"
+                name="description"
                 required
                 description="Saisissez une description du bien"
             >
                 <UTextarea v-model="state.description" :rows="10" />
             </UFormGroup>
 
-            <UFormGroup label="Surface" required description="Saisissez la surface du bien en m²">
+            <UFormGroup
+                label="Surface"
+                name="surface"
+                required
+                description="Saisissez la surface du bien en m²"
+            >
                 <template #description> En m² </template>
                 <UInput v-model="state.surface" type="number" />
             </UFormGroup>
 
-            <UFormGroup label="Loyer" required description="Saisissez le loyer du bien par nuit">
+            <UFormGroup
+                label="Loyer"
+                name="rent"
+                required
+                description="Saisissez le loyer du bien par nuit"
+            >
                 <template #description> En € par nuit </template>
                 <UInput v-model="state.rent" type="number" />
             </UFormGroup>

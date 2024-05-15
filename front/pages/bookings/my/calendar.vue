@@ -21,7 +21,7 @@ const {
     return data;
 });
 
-$listen('data:refresh', () => {
+$listen('data:refresh:bookings', () => {
     refresh();
 });
 
