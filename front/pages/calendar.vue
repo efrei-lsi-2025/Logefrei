@@ -6,7 +6,8 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import type { CalendarOptions } from '@fullcalendar/core/index.js';
 
 definePageMeta({
-    name: 'Calendrier'
+    name: 'Calendrier',
+    icon: 'i-heroicons-calendar'
 });
 
 const { $client, $listen } = useNuxtApp();
