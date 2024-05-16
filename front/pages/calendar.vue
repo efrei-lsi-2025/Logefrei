@@ -6,7 +6,8 @@ import frLocale from '@fullcalendar/core/locales/fr';
 import type { CalendarOptions } from '@fullcalendar/core/index.js';
 
 definePageMeta({
-    name: 'Calendrier'
+    name: 'Calendrier',
+    icon: 'i-heroicons-calendar'
 });
 
 const { $client, $listen } = useNuxtApp();
@@ -21,7 +22,7 @@ const {
     return data;
 });
 
-$listen('data:refresh', () => {
+$listen('data:refresh:bookings', () => {
     refresh();
 });
 
@@ -48,9 +49,7 @@ const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
 </script>
 
 <template>
-    <div class="pt-3">
-        <FullCalendar :options="calendarOptions" />
-    </div>
+    <FullCalendar :options="calendarOptions" />
 </template>
 
 <style>

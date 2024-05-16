@@ -70,8 +70,8 @@ model Booking {
   startDate DateTime
   endDate   DateTime
 
-  housing   Housing? @relation(fields: [housingId], references: [id], onDelete: SetNull)
-  housingId String?
+  housing   Housing @relation(fields: [housingId], references: [id], onDelete: Cascade)
+  housingId String
 
   tenant   User   @relation(fields: [tenantId], references: [id])
   tenantId String

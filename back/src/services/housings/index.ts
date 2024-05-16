@@ -2,14 +2,13 @@ import { t, Elysia } from 'elysia';
 import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
 import { HousingsService } from './service';
-import { Housing, HousingCreationDTO, HousingUpdateDTO, ManyHousings } from './models';
+import { HousingModels } from './models';
 import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
-import { injectModelsPlugin } from '../../middlewares/inject-models';
 
 export const HousingsController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
-    .use(injectModelsPlugin)
+    .model({ ...HousingModels })
 
     .error({
         RecordNotFoundError,
@@ -26,7 +25,7 @@ export const HousingsController = new Elysia()
 
     .get('/', async () => await HousingsService.getHousings(), {
         response: {
-            200: ManyHousings
+            200: 'ManyHousings'
         },
         detail: {
             tags: ['Housings'],
@@ -34,16 +33,36 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .post('/', async ({ body }) => await HousingsService.createHousing(body), {
-        body: 'HousingCreationDTO',
-        response: {
-            200: 'Housing'
-        },
-        detail: {
-            tags: ['Housings'],
-            summary: 'Create a housing'
+    .post(
+        '/',
+        async ({ body, user: { id: userId } }) => await HousingsService.createHousing(body, userId),
+        {
+            body: 'HousingCreationDTO',
+            response: {
+                200: 'Housing'
+            },
+            detail: {
+                tags: ['Housings'],
+                summary: 'Create a housing'
+            }
         }
-    })
+    )
+
+    .group('/users', (group) =>
+        group.get(
+            '/',
+            async ({ user: { id: userId } }) => await HousingsService.getHousingsForUser(userId),
+            {
+                response: {
+                    200: 'ManyHousings'
+                },
+                detail: {
+                    tags: ['Housings'],
+                    summary: 'Get housings owned by the current user'
+                }
+            }
+        )
+    )
 
     .group('/:housingId', (group) =>
         group
@@ -85,9 +104,6 @@ export const HousingsController = new Elysia()
                 async ({ params: { housingId } }) => await HousingsService.deleteHousing(housingId),
                 {
                     params: t.Object({ housingId: t.String() }),
-                    response: {
-                        200: 'Housing'
-                    },
                     detail: {
                         tags: ['Housings'],
                         summary: 'Delete a housing'

@@ -1,9 +1,14 @@
 <script setup lang="ts">
 const links = [
     {
-        label: 'Dashboard',
-        icon: 'i-heroicons-home',
+        label: 'Recherche',
+        icon: 'i-heroicons-magnifying-glass',
         to: '/'
+    },
+    {
+        label: 'Calendrier',
+        icon: 'i-heroicons-calendar-days',
+        to: '/calendar'
     },
     {
         label: 'Réservations',
@@ -14,11 +19,6 @@ const links = [
         label: 'Hébergements',
         icon: 'i-heroicons-home-modern',
         to: '/housings'
-    },
-    {
-        label: 'Recherche',
-        icon: 'i-heroicons-magnifying-glass',
-        to: '/search'
     }
 ];
 </script>

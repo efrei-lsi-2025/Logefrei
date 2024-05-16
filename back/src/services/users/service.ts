@@ -1,5 +1,5 @@
 import prisma from '../../clients/prisma';
-import { UserUpdateDTO } from './models';
+import { UserPrismaSelect, UserUpdateDTO } from './models';
 
 export abstract class UserService {
     static async updateUser(id: string, data: UserUpdateDTO) {
@@ -7,7 +7,8 @@ export abstract class UserService {
             where: {
                 id
             },
-            data
+            data,
+            select: UserPrismaSelect
         });
     }
 }

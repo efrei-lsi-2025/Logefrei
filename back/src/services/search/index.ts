@@ -2,16 +2,14 @@ import Elysia, { t } from 'elysia';
 import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
 import { SearchService } from './service';
-import { BookingHousingLookupDTO, SearchModels } from './models';
-import { HousingModels, ManyHousings } from '../housings/models';
-import { UserModels } from '../users/models';
-import { BookingModels } from '../bookings/models';
-import { injectModelsPlugin } from '../../middlewares/inject-models';
+import { SearchModels } from './models';
+import { HousingModels } from '../housings/models';
 
 export const SearchController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
-    .use(injectModelsPlugin)
+
+    .model({ ...SearchModels, ...HousingModels })
 
     .group('/housings', (group) =>
         group.get(
