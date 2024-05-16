@@ -67,7 +67,7 @@ const onSubmit = async ({ data }: FormSubmitEvent<Form>) => {
                     :value-attribute="'value'"
                 >
                     <template #leading>
-                        <ElementsBookingTypeIcon :type="state.type" />
+                        <ElementsBookingTypeIcon v-if="state.type" :type="state.type" />
                     </template>
                 </USelectMenu>
             </UFormGroup>
