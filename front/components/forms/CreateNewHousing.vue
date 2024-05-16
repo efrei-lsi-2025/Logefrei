@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
-import { add } from 'date-fns';
 
 const { $client, $event } = useNuxtApp();
 const toast = useToast();

@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user';
-
 definePageMeta({
-    name: 'Dashboard'
+  name: "Recherche",
 });
-
-const userStore = useUserStore();
 </script>
 
 <template>
-    <div>
-        <PagesTitle icon="i-heroicons-home" name="Dashboard" />
-    </div>
-    Salut, comment ça va {{ userStore.user?.name }} ? La forme ? Ca gaze ?
+  <div>
+    <PagesTitle icon="i-heroicons-magnifying-glass" name="Recherche" />
+  </div>
 </template>

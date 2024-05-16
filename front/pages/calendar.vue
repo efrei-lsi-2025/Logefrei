@@ -48,9 +48,7 @@ const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
 </script>
 
 <template>
-    <div class="pt-3">
-        <FullCalendar :options="calendarOptions" />
-    </div>
+    <FullCalendar :options="calendarOptions" />
 </template>
 
 <style>
