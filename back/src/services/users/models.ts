@@ -1,5 +1,17 @@
-import Elysia, { Static, t } from 'elysia';
+import { Static, t } from 'elysia';
 import { ParametrizedRef } from '../../utils/typebox';
+import { Prisma } from '@prisma/client';
+
+export const UserPrismaSelect = {
+    id: true,
+    email: true,
+    name: true,
+    phone: true,
+    address: true,
+    isAdmin: true,
+    createdAt: true,
+    updatedAt: true
+} satisfies Prisma.UserSelect;
 
 export const User = t.Object(
     {

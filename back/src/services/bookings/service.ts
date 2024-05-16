@@ -1,16 +1,14 @@
 import { Booking, Prisma } from '@prisma/client';
 import prisma from '../../clients/prisma';
-import { BookingCreationDTO } from './models';
+import { BookingCreationDTO, BookingPrismaSelect } from './models';
 import { InvalidOperationError, RecordNotFoundError, UnauthorizedError } from '../../utils/errors';
+import { UserPrismaSelect } from '../users/models';
 
 export abstract class BookingsService {
     static async getBooking(id: string) {
         const booking = await prisma.booking.findUnique({
             where: { id },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
         });
         if (booking === null) throw new RecordNotFoundError(`Booking with id ${id} not found`);
         return booking;
@@ -19,30 +17,28 @@ export abstract class BookingsService {
     static async getBookingsForHousing(housingId: string) {
         return prisma.booking.findMany({
             where: { housingId },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
         });
     }
 
     static async getBookingsForUser(userId: string) {
         return prisma.booking.findMany({
             where: { tenantId: userId },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
+        });
+    }
+
+    static async getBookingsForUserHousings(userId: string) {
+        return prisma.booking.findMany({
+            where: { housing: { ownerId: userId } },
+            select: BookingPrismaSelect
         });
     }
 
     static async createBooking(booking: BookingCreationDTO, tenantId: string) {
         return prisma.booking.create({
             data: { ...booking, tenantId },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
         });
     }
 
@@ -77,10 +73,7 @@ export abstract class BookingsService {
         return prisma.booking.update({
             where: { id },
             data: { status: 'Cancelled' },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
         });
     }
 
@@ -110,10 +103,7 @@ export abstract class BookingsService {
         return prisma.booking.update({
             where: { id },
             data: { status: 'Accepted' },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
         });
     }
 
@@ -143,10 +133,7 @@ export abstract class BookingsService {
         return prisma.booking.update({
             where: { id },
             data: { status: 'Rejected' },
-            include: {
-                housing: true,
-                tenant: true
-            }
+            select: BookingPrismaSelect
         });
     }
 

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { format } from 'date-fns';
-
 definePageMeta({
     name: 'Mes réservations'
 });

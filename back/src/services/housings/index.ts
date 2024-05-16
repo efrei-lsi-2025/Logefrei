@@ -34,22 +34,25 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .post('/', async ({ body, user: { id: userId } }) => await HousingsService.createHousing(body, userId), {
-        body: 'HousingCreationDTO',
-        response: {
-            200: 'Housing'
-        },
-        detail: {
-            tags: ['Housings'],
-            summary: 'Create a housing'
+    .post(
+        '/',
+        async ({ body, user: { id: userId } }) => await HousingsService.createHousing(body, userId),
+        {
+            body: 'HousingCreationDTO',
+            response: {
+                200: 'Housing'
+            },
+            detail: {
+                tags: ['Housings'],
+                summary: 'Create a housing'
+            }
         }
-    })
+    )
 
     .group('/users', (group) =>
         group.get(
             '/',
-            async ({ user: { id: userId } }) =>
-                await HousingsService.getHousingsForUser(userId),
+            async ({ user: { id: userId } }) => await HousingsService.getHousingsForUser(userId),
             {
                 response: {
                     200: ManyHousings
@@ -102,9 +105,6 @@ export const HousingsController = new Elysia()
                 async ({ params: { housingId } }) => await HousingsService.deleteHousing(housingId),
                 {
                     params: t.Object({ housingId: t.String() }),
-                    response: {
-                        200: 'Housing'
-                    },
                     detail: {
                         tags: ['Housings'],
                         summary: 'Delete a housing'
