@@ -3,7 +3,7 @@ const router = useRouter();
 
 onMounted(() => {
     if (router.currentRoute.value.path === '/bookings') {
-        router.push('/bookings/my/user-bookings');
+        router.push('/bookings/my');
     }
 });
 </script>
