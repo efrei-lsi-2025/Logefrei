@@ -1,4 +1,4 @@
-import Elysia, { t } from 'elysia';
+import { t } from 'elysia';
 
 export const BookingHousingLookupDTO = t.Object({
     startDate: t.Date(),

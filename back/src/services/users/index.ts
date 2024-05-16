@@ -1,13 +1,14 @@
 import Elysia from 'elysia';
 import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
-import { injectModelsPlugin } from '../../middlewares/inject-models';
 import { UserService } from './service';
+import { UserModels } from './models';
 
 export const UsersController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
-    .use(injectModelsPlugin)
+
+    .model({ ...UserModels })
 
     .put(
         '/me',

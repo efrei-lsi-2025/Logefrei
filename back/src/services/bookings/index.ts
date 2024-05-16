@@ -3,12 +3,13 @@ import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
 import { BookingsService } from './service';
 import { InvalidOperationError, RecordNotFoundError } from '../../utils/errors';
-import { injectModelsPlugin } from '../../middlewares/inject-models';
+import { BookingModels } from './models';
 
 export const BookingsController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
-    .use(injectModelsPlugin)
+
+    .model({ ...BookingModels })
 
     .error({
         RecordNotFoundError,
