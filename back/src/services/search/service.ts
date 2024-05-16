@@ -26,8 +26,17 @@ export abstract class SearchService {
                                 endDate: {
                                     gte: endDate
                                 }
+                            },
+                            {
+                                startDate: {
+                                    gte: startDate
+                                },
+                                endDate: {
+                                    lte: endDate
+                                }
                             }
-                        ]
+                        ],
+                        status: 'Accepted'
                     }
                 }
             }
