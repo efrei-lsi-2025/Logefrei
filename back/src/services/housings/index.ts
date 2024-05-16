@@ -3,25 +3,11 @@ import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
 import { HousingsService } from './service';
 import { HousingModels } from './models';
-import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
 
 export const HousingsController = new Elysia()
     .use(injectStorePlugin)
     .use(userRegisterPlugin)
     .model({ ...HousingModels })
-
-    .error({
-        RecordNotFoundError,
-        InvalidOperationError
-    })
-    .onError(({ code, error }) => {
-        switch (code) {
-            case 'RecordNotFoundError':
-                return new Response(error.message, { status: 404 });
-            case 'InvalidOperationError':
-                return new Response(error.message, { status: 400 });
-        }
-    })
 
     .get('/', async () => await HousingsService.getHousings(), {
         response: {
@@ -78,6 +64,8 @@ export const HousingsController = new Elysia()
                     }
                 }
             )
+
+
 
             .put(
                 '/',

@@ -2,7 +2,6 @@ import Elysia, { t } from 'elysia';
 import { userRegisterPlugin } from '../../middlewares/user-register';
 import { injectStorePlugin } from '../../middlewares/inject-store';
 import { BookingsService } from './service';
-import { InvalidOperationError, RecordNotFoundError } from '../../utils/errors';
 import { BookingModels } from './models';
 
 export const BookingsController = new Elysia()
@@ -10,19 +9,6 @@ export const BookingsController = new Elysia()
     .use(userRegisterPlugin)
 
     .model({ ...BookingModels })
-
-    .error({
-        RecordNotFoundError,
-        InvalidOperationError
-    })
-    .onError(({ code, error }) => {
-        switch (code) {
-            case 'RecordNotFoundError':
-                return new Response(error.message, { status: 404 });
-            case 'InvalidOperationError':
-                return new Response(error.message, { status: 400 });
-        }
-    })
 
     .post(
         '/',
@@ -93,9 +79,12 @@ export const BookingsController = new Elysia()
 
     .group('/:bookingId', (group) =>
         group
+            .derive(
+                async ({ params: { bookingId } }) => ({ booking: await BookingsService.getBooking(bookingId) }),
+            )
             .get(
                 '/',
-                async ({ params: { bookingId } }) => await BookingsService.getBooking(bookingId),
+                ({ booking }) => booking,
                 {
                     params: t.Object({ bookingId: t.String() }),
                     response: {
@@ -109,9 +98,10 @@ export const BookingsController = new Elysia()
             )
             .put(
                 '/cancel',
-                async ({ params: { bookingId }, user: { id: userId } }) =>
-                    await BookingsService.cancelBooking(bookingId, userId),
+                async ({ booking }) =>
+                    await BookingsService.cancelBooking(booking),
                 {
+                    beforeHandle: ({ booking, user }) => BookingsService.checkCanCancel(booking, user),
                     params: t.Object({ bookingId: t.String() }),
                     response: {
                         200: 'Booking'
@@ -124,9 +114,10 @@ export const BookingsController = new Elysia()
             )
             .put(
                 '/accept',
-                async ({ params: { bookingId }, user: { id: userId } }) =>
-                    await BookingsService.acceptBooking(bookingId, userId),
+                async ({ booking }) =>
+                    await BookingsService.acceptBooking(booking),
                 {
+                    beforeHandle: ({ booking, user }) => BookingsService.checkCanAccept(booking, user),
                     params: t.Object({ bookingId: t.String() }),
                     response: {
                         200: 'Booking'
@@ -139,9 +130,10 @@ export const BookingsController = new Elysia()
             )
             .put(
                 '/reject',
-                async ({ params: { bookingId }, user: { id: userId } }) =>
-                    await BookingsService.rejectBooking(bookingId, userId),
+                async ({ booking }) =>
+                    await BookingsService.rejectBooking(booking),
                 {
+                    beforeHandle: ({ booking, user }) => BookingsService.checkCanReject(booking, user),
                     params: t.Object({ bookingId: t.String() }),
                     response: {
                         200: 'Booking'

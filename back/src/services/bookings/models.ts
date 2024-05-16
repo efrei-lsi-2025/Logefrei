@@ -24,6 +24,8 @@ export const Booking = t.Object(
     }
 );
 
+export type Booking = Static<typeof Booking>;
+
 export const ManyBookings = t.Array(
     ParametrizedRef<typeof Booking>('#/components/schemas/Booking'),
     {
