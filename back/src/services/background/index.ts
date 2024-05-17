@@ -1,3 +1,3 @@
 export class BackgroundService {
-    constructor() {}
+    constructor() { }
 }
