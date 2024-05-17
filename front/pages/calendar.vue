@@ -7,7 +7,9 @@ import type { CalendarOptions } from '@fullcalendar/core/index.js';
 
 definePageMeta({
     name: 'Calendrier',
-    icon: 'i-heroicons-calendar'
+    icon: 'i-heroicons-calendar',
+    showInMenu: true,
+    order: 2
 });
 
 const { $client, $listen } = useNuxtApp();
@@ -49,6 +51,7 @@ const calendarOptions: ComputedRef<CalendarOptions> = computed(() => ({
 </script>
 
 <template>
+    <PagesTitle />
     <FullCalendar :options="calendarOptions" />
 </template>
 

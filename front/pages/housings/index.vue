@@ -3,7 +3,9 @@ import { FormsCreateNewHousing } from '#components';
 
 definePageMeta({
     name: 'Mes hébergements',
-    icon: 'i-heroicons-home-modern'
+    icon: 'i-heroicons-home-modern',
+    showInMenu: true,
+    order: 4
 });
 
 const { $client, $listen } = useNuxtApp();

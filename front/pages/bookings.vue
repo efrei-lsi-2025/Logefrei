@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+const router = useRouter();
+
 onMounted(() => {
-    const router = useRouter();
     if (router.currentRoute.value.path === '/bookings') {
         router.push('/bookings/my');
     }
