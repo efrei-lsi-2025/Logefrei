@@ -1,10 +1,9 @@
 import prisma from '../../clients/prisma';
 import { HousingCreationDTO, HousingUpdateDTO, HousingPrismaSelect, Housing } from './models';
+import { User } from '../users/models';
 import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
 import { InternalBookingsClient } from '../../clients/microservices';
 import { HousingAvailabilityStatus } from '@prisma/client';
-
-type User = Housing['owner'];
 
 export abstract class HousingsService {
     static async getHousing(id: string) {
