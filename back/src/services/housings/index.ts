@@ -19,9 +19,21 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .post(
-        '/',
-        async ({ body, user: { id: userId } }) => await HousingsService.createHousing(body, userId),
+    .get('/', async () => await HousingsService.getHousings(),
+        {
+            response: {
+                200: 'ManyHousings'
+            },
+            detail: {
+                tags: ['Housings'],
+                summary: 'Get all housings'
+            }
+        }
+    )
+
+    .post('/',
+        async ({ body, user: { id: userId } }) =>
+            await HousingsService.createHousing(body, userId),
         {
             body: 'HousingCreationDTO',
             response: {
@@ -53,9 +65,11 @@ export const HousingsController = new Elysia()
     .group('/:housingId', (group) =>
         group
 
+            .derive(async ({ params: { housingId } }) => ({ housing: await HousingsService.getHousing(housingId) }))
+
             .get(
                 '/',
-                async ({ params: { housingId } }) => await HousingsService.getHousing(housingId),
+                ({ housing }) => housing,
                 {
                     params: t.Object({ housingId: t.String() }),
                     response: {
@@ -68,12 +82,12 @@ export const HousingsController = new Elysia()
                 }
             )
 
-
+            .onBeforeHandle(({ housing, user }) => HousingsService.checkIsOwner(housing, user))
 
             .put(
                 '/',
-                async ({ params: { housingId }, body }) =>
-                    await HousingsService.updateHousing(housingId, body),
+                async ({ housing, body }) =>
+                    await HousingsService.updateHousing(housing, body),
                 {
                     params: t.Object({ housingId: t.String() }),
                     body: 'HousingUpdateDTO',
@@ -83,18 +97,6 @@ export const HousingsController = new Elysia()
                     detail: {
                         tags: ['Housings'],
                         summary: 'Update a housing'
-                    }
-                }
-            )
-
-            .delete(
-                '/',
-                async ({ params: { housingId } }) => await HousingsService.deleteHousing(housingId),
-                {
-                    params: t.Object({ housingId: t.String() }),
-                    detail: {
-                        tags: ['Housings'],
-                        summary: 'Delete a housing'
                     }
                 }
             )
