@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { ElementsFormSlideOver, FormsCreateNewBooking } from '#components';
+import { FormsCreateNewBooking } from '#components';
 
 definePageMeta({
-    name: 'Réservations'
+    name: 'Réservations',
+    icon: 'i-heroicons-calendar-days',
+    showInMenu: true,
+    order: 3
 });
 
 const items = [
     {
-        key: 'my-bookings',
+        key: 'user-bookings',
         label: 'Mes réservations'
     },
     {
-        key: 'my-housings-bookings',
+        key: 'housings-bookings',
         label: 'Réservations de mes hébergements'
     }
 ];
@@ -33,6 +36,7 @@ const selected = computed({
         return index;
     },
     set(value) {
+        console.log(value);
         router.push({
             name: items[value].label
         });
@@ -49,7 +53,7 @@ const openCreateNewBookingSlideOver = () => {
 </script>
 
 <template>
-    <PagesTitle icon="i-heroicons-calendar" name="Réservations">
+    <PagesTitle>
         <template #actions>
             <UButton color="primary" icon="i-heroicons-plus" @click="openCreateNewBookingSlideOver"
                 >Créer une réservation</UButton

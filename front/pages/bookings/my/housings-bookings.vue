@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 definePageMeta({
-    name: 'Réservation de mes hébergements'
+    name: 'Réservations de mes hébergements'
 });
 
 const { $client, $listen } = useNuxtApp();
