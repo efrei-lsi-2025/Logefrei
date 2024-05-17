@@ -6,7 +6,7 @@
         "start:dev": "bun run --watch src/index.ts",
         "start:prod": "bunx prisma migrate deploy && bun run src/index.ts",
         "prisma:dev:env": "cross-env DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres",
-        "prisma:dev:migrate": "bun run prisma:dev:env prisma migrate dev",
+        "prisma:dev:migrate": "bun run prisma:dev:env prisma migrate dev && bunx prisma generate",
         "prisma:dev:seed": "bun run prisma:dev:env prisma db seed",
         "prisma:dev:apply": "bun run prisma:dev:env prisma migrate deploy",
         "prisma:dev:studio": "bun run prisma:dev:env prisma studio"
