@@ -9,5 +9,4 @@ const id = route.params.id;
 
 <template>
     <PagesTitle />
-    zdaeghtrtgfed
 </template>

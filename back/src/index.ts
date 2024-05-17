@@ -5,6 +5,7 @@ import { SearchController } from './services/search';
 import { UsersController } from './services/users';
 import swagger from '@elysiajs/swagger';
 import { InternalBookingsController } from './services/bookings/internal';
+import { RecordNotFoundError, InvalidOperationError, UnauthorizedError } from './utils/errors';
 
 const app = new Elysia()
     .use(
@@ -20,6 +21,22 @@ const app = new Elysia()
             }
         })
     )
+
+    .error({
+        RecordNotFoundError,
+        InvalidOperationError,
+        UnauthorizedError
+    })
+    .onError(({ code, error }) => {
+        switch (code) {
+            case 'InvalidOperationError':
+                return new Response(error.message, { status: 400 });
+            case 'UnauthorizedError':
+                return new Response(error.message, { status: 401 });
+            case 'RecordNotFoundError':
+                return new Response(error.message, { status: 404 });
+        }
+    })
 
     .group('/api', (app) =>
         app
