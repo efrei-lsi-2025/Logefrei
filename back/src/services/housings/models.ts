@@ -1,5 +1,5 @@
 import { t, Static } from 'elysia';
-import { HousingType, HousingStatus, Prisma } from '@prisma/client';
+import { HousingType, HousingStatus, Prisma, HousingAvailabilityStatus } from '@prisma/client';
 import { ParametrizedRef } from '../../utils/typebox';
 import { type UserSchema, UserPrismaSelect } from '../users/models';
 
@@ -15,6 +15,7 @@ export const HousingPrismaSelect = {
     },
     ownerId: true,
     status: true,
+    availabiltyStatus: true,
     createdAt: true,
     updatedAt: true
 } satisfies Prisma.HousingSelect;
@@ -30,6 +31,7 @@ export const Housing = t.Object(
         owner: ParametrizedRef<UserSchema>('#/components/schemas/User'),
         ownerId: t.String(),
         status: t.Enum(HousingStatus),
+        availabiltyStatus: t.Enum(HousingAvailabilityStatus),
         createdAt: t.Date(),
         updatedAt: t.Date()
     },

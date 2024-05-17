@@ -2,82 +2,88 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x"]
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
-  name  String
+    id    String @id @default(cuid())
+    email String @unique
+    name  String
 
-  phone   String?
-  address String?
+    phone   String?
+    address String?
 
-  isAdmin Boolean @default(false)
+    isAdmin Boolean @default(false)
 
-  housings Housing[]
-  bookings Booking[]
+    housings Housing[]
+    bookings Booking[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 enum HousingType {
-  House
-  Apartment
+    House
+    Apartment
 }
 
 enum HousingStatus {
-  Draft
-  Available
-  Occupied
+    Draft
+    Published
+    Withdrawn
+}
+
+enum HousingAvailabilityStatus {
+    Available
+    Occupied
 }
 
 model Housing {
-  id          String      @id @default(cuid())
-  type        HousingType
-  rent        Float
-  address     String
-  surface     Int
-  description String
+    id          String      @id @default(cuid())
+    type        HousingType
+    rent        Float
+    address     String
+    surface     Int
+    description String
 
-  owner   User   @relation(fields: [ownerId], references: [id])
-  ownerId String
+    owner   User   @relation(fields: [ownerId], references: [id])
+    ownerId String
 
-  status HousingStatus @default(Draft)
+    status            HousingStatus              @default(Draft)
+    availabiltyStatus HousingAvailabilityStatus?
 
-  bookings Booking[]
+    bookings Booking[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 enum BookingStatus {
-  Pending
-  Accepted
-  Rejected
-  Cancelled
+    Pending
+    Accepted
+    Rejected
+    Cancelled
 }
 
 model Booking {
-  id        String   @id @default(cuid())
-  startDate DateTime
-  endDate   DateTime
+    id        String   @id @default(cuid())
+    startDate DateTime
+    endDate   DateTime
 
-  housing   Housing @relation(fields: [housingId], references: [id], onDelete: Cascade)
-  housingId String
+    housing   Housing @relation(fields: [housingId], references: [id], onDelete: Cascade)
+    housingId String
 
-  tenant   User   @relation(fields: [tenantId], references: [id])
-  tenantId String
+    tenant   User   @relation(fields: [tenantId], references: [id])
+    tenantId String
 
-  status BookingStatus @default(Pending)
+    status BookingStatus @default(Pending)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

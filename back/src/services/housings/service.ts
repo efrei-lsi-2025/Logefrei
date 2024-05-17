@@ -37,7 +37,7 @@ export abstract class HousingsService {
     static async updateHousing(id: string, newHousing: Partial<Housing>) {
         const housing = await this.getHousing(id);
 
-        if (newHousing.status === 'Draft' && housing.status === 'Occupied')
+        if (newHousing.status !== 'Published' && housing.status === 'Occupied')
             throw new InvalidOperationError('Cannot update an occupied housing to draft');
         else if (newHousing.status === 'Occupied' && housing.status === 'Draft')
             throw new InvalidOperationError('Cannot update a draft housing to occupied');
