@@ -1,6 +1,23 @@
 import { t, Static } from 'elysia';
-import { HousingType, HousingStatus } from '@prisma/client';
+import { HousingType, HousingStatus, Prisma } from '@prisma/client';
 import { ParametrizedRef } from '../../utils/typebox';
+import { type UserSchema, UserPrismaSelect } from '../users/models';
+
+export const HousingPrismaSelect = {
+    id: true,
+    type: true,
+    rent: true,
+    address: true,
+    surface: true,
+    description: true,
+    owner: {
+        select: UserPrismaSelect
+    },
+    ownerId: true,
+    status: true,
+    createdAt: true,
+    updatedAt: true
+} satisfies Prisma.HousingSelect;
 
 export const Housing = t.Object(
     {
@@ -10,6 +27,7 @@ export const Housing = t.Object(
         address: t.String(),
         surface: t.Number(),
         description: t.String(),
+        owner: ParametrizedRef<UserSchema>('#/components/schemas/User'),
         ownerId: t.String(),
         status: t.Enum(HousingStatus),
         createdAt: t.Date(),
@@ -31,7 +49,7 @@ export const HousingCreationDTO = t.Object({
     rent: t.Number(),
     address: t.String(),
     surface: t.Number(),
-    description: t.String(),
+    description: t.String()
 });
 
 export const HousingUpdateDTO = t.Object({

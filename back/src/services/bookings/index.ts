@@ -26,23 +26,40 @@ export const BookingsController = new Elysia()
     )
 
     .group('/housings', (group) =>
-        group.group('/:housingId', (group) =>
-            group.get(
-                '/',
-                async ({ params: { housingId } }) =>
-                    await BookingsService.getBookingsForHousing(housingId),
-                {
-                    params: t.Object({ housingId: t.String() }),
-                    response: {
-                        200: 'ManyBookings'
-                    },
-                    detail: {
-                        tags: ['Bookings'],
-                        summary: 'Get bookings for a housing'
+        group
+            .group('/:housingId', (group) =>
+                group.get(
+                    '/',
+                    async ({ params: { housingId } }) =>
+                        await BookingsService.getBookingsForHousing(housingId),
+                    {
+                        params: t.Object({ housingId: t.String() }),
+                        response: {
+                            200: 'ManyBookings'
+                        },
+                        detail: {
+                            tags: ['Bookings'],
+                            summary: 'Get bookings for a housing'
+                        }
                     }
-                }
+                )
             )
-        )
+            .group('/users', (group) =>
+                group.get(
+                    '/',
+                    async ({ user: { id: userId } }) =>
+                        await BookingsService.getBookingsForUserHousings(userId),
+                    {
+                        response: {
+                            200: 'ManyBookings'
+                        },
+                        detail: {
+                            tags: ['Bookings'],
+                            summary: 'Get bookings for a users housings'
+                        }
+                    }
+                )
+            )
     )
 
     .group('/users', (group) =>

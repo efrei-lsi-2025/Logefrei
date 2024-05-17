@@ -1,10 +1,26 @@
 import { Static, t } from 'elysia';
 
-import type { TArray, TRef } from '@sinclair/typebox';
-import { HousingSchema } from '../housings/models';
+import { HousingPrismaSelect, HousingSchema } from '../housings/models';
 import { ParametrizedRef } from '../../utils/typebox';
-import { UserSchema } from '../users/models';
-import { BookingStatus } from '@prisma/client';
+import { UserPrismaSelect, UserSchema } from '../users/models';
+import { BookingStatus, Prisma } from '@prisma/client';
+
+export const BookingPrismaSelect = {
+    id: true,
+    housingId: true,
+    housing: {
+        select: HousingPrismaSelect
+    },
+    startDate: true,
+    endDate: true,
+    tenantId: true,
+    tenant: {
+        select: UserPrismaSelect
+    },
+    status: true,
+    createdAt: true,
+    updatedAt: true
+} satisfies Prisma.BookingSelect;
 
 export const Booking = t.Object(
     {
