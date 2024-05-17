@@ -19,9 +19,21 @@ export const HousingsController = new Elysia()
         }
     })
 
-    .post(
-        '/',
-        async ({ body, user: { id: userId } }) => await HousingsService.createHousing(body, userId),
+    .get('/', async () => await HousingsService.getHousings(),
+        {
+            response: {
+                200: 'ManyHousings'
+            },
+            detail: {
+                tags: ['Housings'],
+                summary: 'Get all housings'
+            }
+        }
+    )
+
+    .post('/',
+        async ({ body, user: { id: userId } }) =>
+            await HousingsService.createHousing(body, userId),
         {
             body: 'HousingCreationDTO',
             response: {
@@ -53,9 +65,11 @@ export const HousingsController = new Elysia()
     .group('/:housingId', (group) =>
         group
 
+            .derive(async ({ params: { housingId } }) => ({ housing: await HousingsService.getHousing(housingId) }))
+
             .get(
                 '/',
-                async ({ params: { housingId } }) => await HousingsService.getHousing(housingId),
+                ({ housing }) => housing,
                 {
                     params: t.Object({ housingId: t.String() }),
                     response: {
@@ -68,12 +82,12 @@ export const HousingsController = new Elysia()
                 }
             )
 
-
+            .onBeforeHandle(({ housing, user }) => HousingsService.checkIsOwner(housing, user))
 
             .put(
                 '/',
-                async ({ params: { housingId }, body }) =>
-                    await HousingsService.updateHousing(housingId, body),
+                async ({ housing, body }) =>
+                    await HousingsService.updateHousing(housing, body),
                 {
                     params: t.Object({ housingId: t.String() }),
                     body: 'HousingUpdateDTO',
@@ -87,9 +101,9 @@ export const HousingsController = new Elysia()
                 }
             )
 
-            .delete(
+            .put(
                 '/',
-                async ({ params: { housingId } }) => await HousingsService.deleteHousing(housingId),
+                async ({ housing }) => await HousingsService.withdrawHousing(housing),
                 {
                     params: t.Object({ housingId: t.String() }),
                     detail: {

@@ -1,8 +1,9 @@
-import { Housing } from '@prisma/client';
 import prisma from '../../clients/prisma';
-import { HousingCreationDTO, HousingPrismaSelect } from './models';
+import { HousingCreationDTO, HousingUpdateDTO, HousingPrismaSelect, Housing } from './models';
 import { RecordNotFoundError, InvalidOperationError } from '../../utils/errors';
 import { InternalBookingsClient } from '../../clients/microservices';
+
+type User = Housing['owner'];
 
 export abstract class HousingsService {
     static async getHousing(id: string) {
@@ -34,37 +35,37 @@ export abstract class HousingsService {
         });
     }
 
-    static async updateHousing(id: string, newHousing: Partial<Housing>) {
-        const housing = await this.getHousing(id);
-
-        if (newHousing.status !== 'Published' && housing.status === 'Occupied')
+    static async updateHousing(oldHousing: Housing, newHousing: HousingUpdateDTO) {
+        if (newHousing.status === 'Draft' && oldHousing.availabilityStatus === 'Occupied')
             throw new InvalidOperationError('Cannot update an occupied housing to draft');
-        else if (newHousing.status === 'Occupied' && housing.status === 'Draft')
-            throw new InvalidOperationError('Cannot update a draft housing to occupied');
 
-        if (newHousing.status === 'Occupied') await this.cancelFutureBookings(id);
+        if (newHousing.status === 'Withdrawn')
+            await this.cancelFutureBookings(oldHousing.id);
 
         return prisma.housing.update({
-            where: { id },
+            where: { id: oldHousing.id },
             data: newHousing,
             select: HousingPrismaSelect
         });
     }
 
-    static async deleteHousing(id: string) {
-        const housing = await this.getHousing(id);
-
-        if (housing.status === 'Occupied')
+    static async withdrawHousing(housing: Housing) {
+        if (housing.status === 'Published' && housing.availabilityStatus === 'Occupied')
             throw new InvalidOperationError('Cannot delete an occupied housing');
 
-        await this.cancelFutureBookings(id);
+        await this.cancelFutureBookings(housing.id);
 
-        return prisma.housing.delete({ where: { id } });
+        return prisma.housing.delete({ where: { id: housing.id } });
     }
 
     static async cancelFutureBookings(housingId: string) {
         return InternalBookingsClient.housings({
             housingId
         }).cancelAllFutureBookings.patch();
+    }
+
+    static checkIsOwner(housing: Housing, user: User) {
+        if (housing.ownerId !== user.id)
+            throw new InvalidOperationError('You cannot update or delete a housing you do not own');
     }
 }

@@ -55,8 +55,8 @@ model Housing {
     owner   User   @relation(fields: [ownerId], references: [id])
     ownerId String
 
-    status            HousingStatus              @default(Draft)
-    availabiltyStatus HousingAvailabilityStatus?
+    status             HousingStatus              @default(Draft)
+    availabilityStatus HousingAvailabilityStatus?
 
     bookings Booking[]
 
