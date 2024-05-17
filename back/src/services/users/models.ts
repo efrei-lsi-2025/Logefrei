@@ -30,6 +30,7 @@ export const User = t.Object(
 );
 
 export type UserSchema = typeof User;
+export type User = Static<typeof User>;
 
 const ManyUsers = t.Array(ParametrizedRef<typeof User>('#/components/schemas/User'));
 

@@ -1,11 +1,11 @@
-import { Housing } from '@prisma/client';
 import prisma from '../../clients/prisma';
+import { HousingPrismaSelect } from '../housings/models';
 
 export abstract class SearchService {
     static async getAvailableHousingsBetweenDates(
         startDate: Date,
         endDate: Date
-    ): Promise<Housing[]> {
+    ) {
         return prisma.housing.findMany({
             where: {
                 bookings: {
@@ -39,7 +39,8 @@ export abstract class SearchService {
                         status: 'Accepted'
                     }
                 }
-            }
+            },
+            select: HousingPrismaSelect
         });
     }
 }
