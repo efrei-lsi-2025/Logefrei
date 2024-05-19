@@ -49,7 +49,10 @@ const computedData = computed(() => data.value ?? []);
         <template #rent-data="{ row }"> {{ row.rent }} € </template>
 
         <template #status-data="{ row }">
-            <ElementsHousingStatusBadge :status="row.status" />
+            <ElementsHousingStatusBadge
+                :status="row.status"
+                :availability="row.availabilityStatus"
+            />
         </template>
     </UTable>
 </template>
