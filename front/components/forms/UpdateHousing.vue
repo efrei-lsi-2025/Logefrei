@@ -17,6 +17,10 @@ const toast = useToast();
 
 const { data, pending } = useAsyncData(async () => {
     const { data } = await $client.housings({ housingId }).index.get();
+    state.rent = data?.rent;
+    state.surface = data?.surface;
+    state.address = data?.address;
+    state.description = data?.description;
     return data;
 });
 

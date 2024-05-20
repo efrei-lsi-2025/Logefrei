@@ -41,7 +41,7 @@ const computedData = computed(() => data.value ?? []);
         </template>
 
         <template #type-data="{ row }">
-            <ElementsBookingTypeIcon :type="row.type" />
+            <ElementsHousingTypeIcon :type="row.type" />
         </template>
 
         <template #surface-data="{ row }"> {{ row.surface }} m² </template>
