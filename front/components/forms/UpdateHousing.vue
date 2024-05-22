@@ -10,12 +10,12 @@ const emit = defineEmits<{
 import { z } from 'zod';
 import type { FormSubmitEvent } from '#ui/types';
 
-const { $client, $event } = useNuxtApp();
+const { $client, $event, $listen } = useNuxtApp();
 const router = useRouter();
 const userStore = useUserStore();
 const toast = useToast();
 
-const { data, pending } = useAsyncData(async () => {
+const { data, pending, refresh } = useAsyncData(async () => {
     const { data } = await $client.housings({ housingId }).index.get();
     state.rent = data?.rent;
     state.surface = data?.surface;
@@ -24,12 +24,43 @@ const { data, pending } = useAsyncData(async () => {
     return data;
 });
 
-const canUpdate = computed(() => userStore.user?.id === data.value?.ownerId);
+const canUpdate = computed(
+    () => userStore.user?.id === data.value?.ownerId && data.value?.status !== 'Withdrawn'
+);
 
-const typeOptions = [
-    { value: 'House', label: 'Maison' },
-    { value: 'Apartment', label: 'Appartement' }
-];
+// TODO : Gérer les états possibles
+const changeStatusList = computed(() => {
+    if (
+        !canUpdate.value ||
+        data.value === null ||
+        data.value.status === 'Withdrawn' ||
+        data.value.availabilityStatus === 'Occupied'
+    ) {
+        return [];
+    }
+
+    return [
+        [
+            {
+                label: 'Brouillon',
+                value: 'Draft',
+                disabled: data.value?.status === 'Draft',
+                click: () => onChangeStatus('Draft')
+            },
+            {
+                label: 'Publié',
+                value: 'Published',
+                disabled: data.value?.status === 'Published',
+                click: () => onChangeStatus('Published')
+            },
+            {
+                label: 'Archivé',
+                value: 'Withdrawn',
+                click: () => onChangeStatus('Withdrawn')
+            }
+        ]
+    ];
+});
 
 const requiredError = { required_error: 'Champ requis' };
 
@@ -60,9 +91,8 @@ const onSubmit = async ({ data: formData }: FormSubmitEvent<Form>) => {
         });
         return;
     }
-    console.log('Update housing', formData);
+
     await $client.housings({ housingId }).index.put(state);
-    console.log('Housing updated');
 
     toast.add({
         title: 'Hébergement mis à jour',
@@ -74,6 +104,13 @@ const onSubmit = async ({ data: formData }: FormSubmitEvent<Form>) => {
     $event('data:refresh:housings');
     router.go(-1);
 };
+
+const onChangeStatus = async (value: 'Draft' | 'Published' | 'Withdrawn') => {
+    await $client.housings({ housingId }).index.put({ status: value });
+    $event('data:refresh:housings');
+};
+
+$listen('data:refresh:housings', () => refresh());
 </script>
 
 <template>
@@ -84,8 +121,20 @@ const onSubmit = async ({ data: formData }: FormSubmitEvent<Form>) => {
                 <ElementsHousingStatusBadge
                     :status="data.status"
                     :availability="data.availabilityStatus"
-                    class="text-sm"
+                    class="text-base"
                 />
+                <UDropdown
+                    v-if="canUpdate"
+                    :popper="{ placement: 'bottom-start' }"
+                    :items="changeStatusList"
+                    :disabled="changeStatusList.length === 0"
+                >
+                    <UButton
+                        color="gray"
+                        label="Changer le statut"
+                        trailing-icon="i-heroicons-chevron-down-20-solid"
+                        class="ml-4"
+                /></UDropdown>
             </div>
             <!-- Add change status dropdown  -->
         </div>

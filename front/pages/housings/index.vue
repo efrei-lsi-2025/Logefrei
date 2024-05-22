@@ -12,7 +12,7 @@ const { $client, $listen } = useNuxtApp();
 
 const { data, refresh, pending } = useAsyncData(async () => {
     const { data } = await $client.housings.users.index.get();
-    return data?.filter((housing) => housing.status !== 'Withdrawn') ?? null;
+    return data;
 });
 
 $listen('data:refresh:housings', () => {

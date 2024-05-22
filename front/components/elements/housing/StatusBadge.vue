@@ -9,9 +9,9 @@ const text = computed(() => {
         case 'Draft':
             return 'Brouillon';
         case 'Published':
-            return availability === 'Available' ? 'Disponible' : 'Retiré';
+            return availability === 'Available' ? 'Disponible' : 'Occupé';
         case 'Withdrawn':
-            return 'Occupé';
+            return 'Archivé';
     }
 });
 
