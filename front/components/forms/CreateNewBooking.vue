@@ -29,7 +29,7 @@ const {
     pending: pendingHousings,
     refresh: refreshHousings
 } = useAsyncData(async () => {
-    const { data } = await $client.search.housings.date.get({
+    const { data } = await $client.search.housings.get({
         query: {
             startDate: state.startDate,
             endDate: state.endDate

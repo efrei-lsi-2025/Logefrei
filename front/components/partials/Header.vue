@@ -33,7 +33,7 @@ const isDark = computed({
                 aria-label="Theme"
                 @click="isDark = !isDark"
             />
-            <UsersButton />
+            <ElementsUsersButton />
         </div>
     </div>
 </template>

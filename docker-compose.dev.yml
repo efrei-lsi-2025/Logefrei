@@ -167,9 +167,11 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
+    entrypoint: [ "bun", "run", "src/services/background/index.ts"]
     environment:
       SERVICE: background
       DATABASE_URL: $DATABASE_URL
+      PORT: 3000
     develop:
       watch:
         - path: ./back

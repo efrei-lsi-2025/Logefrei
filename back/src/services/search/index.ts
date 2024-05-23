@@ -4,6 +4,7 @@ import { injectStorePlugin } from '../../middlewares/inject-store';
 import { SearchService } from './service';
 import { SearchModels } from './models';
 import { HousingModels } from '../housings/models';
+import { InvalidOperationError } from '../../utils/errors';
 
 export const SearchController = new Elysia()
     .use(injectStorePlugin)
@@ -11,20 +12,34 @@ export const SearchController = new Elysia()
 
     .model({ ...SearchModels, ...HousingModels })
 
-    .group('/housings', (group) =>
-        group.get(
-            '/date',
-            async ({ query: { startDate, endDate } }) =>
-                await SearchService.getAvailableHousingsBetweenDates(startDate, endDate),
-            {
-                query: 'BookingHousingLookupDTO',
-                response: {
-                    200: 'ManyHousings'
-                },
-                detail: {
-                    tags: ['Search'],
-                    summary: 'Get all housings'
-                }
+    .get(
+        'housings',
+        async ({ query: { text, startDate, endDate, type, minRent, maxRent, minSurf, maxSurf } }) => {
+
+            let minRentNumber: number | undefined;
+            let maxRentNumber: number | undefined;
+            let minSurfNumber: number | undefined;
+            let maxSurfNumber: number | undefined;
+
+            try {
+                minRentNumber = minRent ? parseFloat(minRent) : undefined;
+                maxRentNumber = maxRent ? parseFloat(maxRent) : undefined;
+                minSurfNumber = minSurf ? parseFloat(minSurf) : undefined;
+                maxSurfNumber = maxSurf ? parseFloat(maxSurf) : undefined;
+            } catch (error) {
+                throw new InvalidOperationError('minRent, maxRent, minSurf and maxSurf must be numbers');
             }
-        )
+
+            return await SearchService.searchHousings(startDate, endDate, text, type, minRentNumber, maxRentNumber, minSurfNumber, maxSurfNumber);
+        },
+        {
+            query: 'SearchHousingLookupDTO',
+            response: {
+                200: 'ManyHousings'
+            },
+            detail: {
+                tags: ['Search'],
+                summary: 'Search housings according to the given parameters'
+            }
+        }
     );
