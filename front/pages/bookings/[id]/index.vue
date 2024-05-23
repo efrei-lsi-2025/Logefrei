@@ -109,6 +109,7 @@ const canUpdate = computed(
                     v-if="data.housing.owner"
                     :housing="data.housing"
                     class="flex-1"
+                    :hideStatus="true"
                 />
                 <UCard v-if="data.tenant" class="flex-1">
                     <template #header>

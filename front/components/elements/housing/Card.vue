@@ -6,6 +6,7 @@ const props = defineProps<{
         Awaited<ReturnType<(typeof $client)['housings']['index']['get']>>['data']
     >[number];
     hideOwner?: boolean;
+    hideStatus?: boolean;
 }>();
 
 const { housing, hideOwner } = toRefs(props);
@@ -20,7 +21,12 @@ const { housing, hideOwner } = toRefs(props);
         <template #header>
             <div class="flex flex-row">
                 <p class="text-base font-semibold leading-6 text-gray-900 dark:text-white flex-1">
-                    Hébergement
+                    <ElementsHousingStatusBadge
+                        v-if="!hideStatus"
+                        :status="housing.status"
+                        :availability="housing.availabilityStatus"
+                    />
+                    <span v-else>Hébergement</span>
                 </p>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     <ElementsHousingTypeIcon :type="housing.type" :showText="true" />
