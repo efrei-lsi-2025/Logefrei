@@ -27,6 +27,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "elysia": "^1.0.17"
+    "elysia": "^1.0.17",
+    "nuxt3-leaflet": "^1.0.12"
   }
 }

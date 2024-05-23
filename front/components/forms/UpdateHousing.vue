@@ -139,7 +139,11 @@ $listen('data:refresh:housings', () => refresh());
             <!-- Add change status dropdown  -->
         </div>
 
-        <UForm :schema="schema" :state="data" class="space-y-4 my-8" @submit="onSubmit" ref="form">
+        <div class="mt-4">
+            <ElementsUsersInfo :user="data.owner" />
+        </div>
+
+        <UForm :schema="schema" :state="data" class="space-y-4 my-4" @submit="onSubmit" ref="form">
             <UFormGroup
                 label="Adresse complète"
                 name="address"
