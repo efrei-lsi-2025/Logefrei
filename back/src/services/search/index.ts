@@ -27,4 +27,19 @@ export const SearchController = new Elysia()
                 }
             }
         )
+            .get(
+                'search',
+                async ({ query: { text, startDate, endDate, type, minRent, maxRent, minSurf, maxSurf } }) =>
+                    await SearchService.searchHousings(text, startDate, endDate, type, minRent, maxRent, minSurf, maxSurf),
+                {
+                    query: 'SearchHousingLookupDTO',
+                    response: {
+                        200: 'ManyHousings'
+                    },
+                    detail: {
+                        tags: ['Search'],
+                        summary: 'Search housings according to the given parameters'
+                    }
+                }
+            )
     );
