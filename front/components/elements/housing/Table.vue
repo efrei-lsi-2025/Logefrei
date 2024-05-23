@@ -41,7 +41,7 @@ const computedData = computed(() => data.value ?? []);
         </template>
 
         <template #type-data="{ row }">
-            <ElementsBookingTypeIcon :type="row.type" />
+            <ElementsHousingTypeIcon :type="row.type" />
         </template>
 
         <template #surface-data="{ row }"> {{ row.surface }} m² </template>
@@ -49,7 +49,10 @@ const computedData = computed(() => data.value ?? []);
         <template #rent-data="{ row }"> {{ row.rent }} € </template>
 
         <template #status-data="{ row }">
-            <ElementsHousingStatusBadge :status="row.status" />
+            <ElementsHousingStatusBadge
+                :status="row.status"
+                :availability="row.availabilityStatus"
+            />
         </template>
     </UTable>
 </template>

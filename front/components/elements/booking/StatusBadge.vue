@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { status } = defineProps<{
-    status: 'Accepted' | 'Pending' | 'Rejected' | 'Canceled';
+    status: 'Accepted' | 'Pending' | 'Rejected' | 'Cancelled';
 }>();
 
 const text = computed(() => {
@@ -11,7 +11,7 @@ const text = computed(() => {
             return 'En attente';
         case 'Rejected':
             return 'Rejeté';
-        case 'Canceled':
+        case 'Cancelled':
             return 'Annulé';
     }
 });
@@ -24,7 +24,7 @@ const color = computed(() => {
             return 'yellow';
         case 'Rejected':
             return 'red';
-        case 'Canceled':
+        case 'Cancelled':
             return 'red';
     }
 });
