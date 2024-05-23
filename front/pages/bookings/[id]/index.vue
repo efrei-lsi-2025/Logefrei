@@ -59,7 +59,7 @@ const isBookingOwner = computed(() => data.value?.tenantId === userStore.user?.i
 
 const canUpdate = computed(
     () =>
-        (data.value?.status === 'Pending' || data.value?.status === 'Accepted') &&
+        data.value?.status === 'Pending' &&
         new Date(data.value?.startDate) > new Date() &&
         (isHousingOwner.value || isBookingOwner.value)
 );
