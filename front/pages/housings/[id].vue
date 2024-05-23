@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 definePageMeta({
-    name: "Détails de l'hébergement"
+    name: "Détails de l'hébergement",
+    icon: 'i-heroicons-home-modern'
 });
 
 const route = useRoute();
-const userStore = useUserStore();
 
 const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 </script>

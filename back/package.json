@@ -1,6 +1,10 @@
 {
   "name": "back",
   "version": "1.0.50",
+  "prisma": {
+    "schema": "prisma/schema.prisma",
+    "seed": "bun run ./prisma/seed.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "bun run --watch src/index.ts",
@@ -15,6 +19,7 @@
     "@elysiajs/eden": "^1.0.13",
     "@elysiajs/swagger": "^1.0.5",
     "@prisma/client": "5.13.0",
+    "@faker-js/faker": "^8.4.1",
     "cron": "^3.1.7",
     "elysia": "^1.0.18"
   },

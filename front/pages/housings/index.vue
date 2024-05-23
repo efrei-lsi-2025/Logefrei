@@ -37,5 +37,12 @@ const openCreateNewHousingSlideOver = () => {
         </template>
     </PagesTitle>
 
-    <ElementsHousingTable :data :pending />
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <ElementsHousingCard
+            v-for="housing in data"
+            :key="housing.id"
+            :housing="housing"
+            :hideOwner="true"
+        />
+    </div>
 </template>
