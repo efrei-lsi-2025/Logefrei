@@ -124,4 +124,18 @@ export abstract class BookingsService {
     static isHost(booking: Booking, user: User) {
         return booking.housing.ownerId === user.id;
     }
+
+    static autoRejectBookings() {
+        return prisma.booking.updateMany({
+            where: {
+                status: 'Pending',
+                startDate: {
+                    lt: new Date()
+                }
+            },
+            data: {
+                status: 'Rejected'
+            }
+        });
+    }
 }

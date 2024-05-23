@@ -5,6 +5,19 @@ import { BookingsService } from './service';
 export const InternalBookingsController = new Elysia()
     .use(injectStorePlugin)
 
+    .group('/bookings', (group) =>
+        group.patch(
+            '/autoReject',
+            async () => await BookingsService.autoRejectBookings(),
+            {
+                detail: {
+                    tags: ['Internal'],
+                    summary: 'Automatically reject bookings that are past their end date'
+                }
+            }
+        )
+    )
+
     .group('/housings', (group) =>
         group.group('/:housingId', (group) =>
             group.patch(
