@@ -4,9 +4,12 @@ definePageMeta({
 });
 
 const route = useRoute();
-const id = route.params.id;
+const userStore = useUserStore();
+
+const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 </script>
 
 <template>
     <PagesTitle />
+    <FormsUpdateHousing :id="id" />
 </template>
