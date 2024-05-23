@@ -4,73 +4,17 @@ import { InvalidOperationError } from '../../utils/errors';
 import { HousingPrismaSelect } from '../housings/models';
 
 export abstract class SearchService {
-    static async getAvailableHousingsBetweenDates(
-        startDate: Date,
-        endDate: Date
-    ) {
-        return prisma.housing.findMany({
-            where: {
-                bookings: {
-                    none: {
-                        OR: [
-                            {
-                                startDate: {
-                                    lte: startDate
-                                },
-                                endDate: {
-                                    gte: startDate
-                                }
-                            },
-                            {
-                                startDate: {
-                                    lte: endDate
-                                },
-                                endDate: {
-                                    gte: endDate
-                                }
-                            },
-                            {
-                                startDate: {
-                                    gte: startDate
-                                },
-                                endDate: {
-                                    lte: endDate
-                                }
-                            }
-                        ],
-                        status: 'Accepted'
-                    }
-                },
-                status: 'Published'
-            },
-            select: HousingPrismaSelect
-        });
-    }
 
     static async searchHousings(
-        text: string,
         startDate: Date,
         endDate: Date,
+        text?: string,
         type?: HousingType,
-        minRentStr?: string,
-        maxRentStr?: string,
-        minSurfStr?: string,
-        maxSurfStr?: string
+        minRent?: number,
+        maxRent?: number,
+        minSurf?: number,
+        maxSurf?: number
     ) {
-        let minRent: number | undefined;
-        let maxRent: number | undefined;
-        let minSurf: number | undefined;
-        let maxSurf: number | undefined;
-
-        try {
-            minRent = minRentStr ? parseFloat(minRentStr) : undefined;
-            maxRent = maxRentStr ? parseFloat(maxRentStr) : undefined;
-            minSurf = minSurfStr ? parseFloat(minSurfStr) : undefined;
-            maxSurf = maxSurfStr ? parseFloat(maxSurfStr) : undefined;
-        } catch (error) {
-            throw new InvalidOperationError('minRent, maxRent, minSurf and maxSurf must be numbers');
-        }
-
         if (minRent && maxRent && minRent > maxRent) {
             throw new InvalidOperationError('minRent must be less than or equal to maxRent');
         }
@@ -86,13 +30,13 @@ export abstract class SearchService {
                         OR: [
                             {
                                 address: {
-                                    contains: text,
+                                    search: text,
                                     mode: 'insensitive'
                                 }
                             },
                             {
                                 description: {
-                                    contains: text,
+                                    search: text,
                                     mode: 'insensitive'
                                 }
                             }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-    type: 'House' | 'Apartment';
+    type: 'House' | 'Apartment' | null;
     showText?: boolean;
 }>();
 
@@ -12,6 +12,8 @@ const icon = computed(() => {
             return 'i-heroicons-home';
         case 'Apartment':
             return 'i-heroicons-building-office-2';
+        default:
+            return null;
     }
 });
 
@@ -21,6 +23,8 @@ const text = computed(() => {
             return 'Maison';
         case 'Apartment':
             return 'Appartement';
+        default:
+            return 'Tous';
     }
 });
 </script>

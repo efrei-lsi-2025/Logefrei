@@ -13,19 +13,23 @@ const { data, pending } = toRefs(props);
 const columns = [
     {
         key: 'housing',
-        label: 'Hébergement'
+        label: 'Hébergement',
+        sortable: true
     },
     {
         key: 'startDate',
-        label: 'Date de début'
+        label: 'Date de début',
+        sortable: true
     },
     {
         key: 'endDate',
-        label: 'Date de fin'
+        label: 'Date de fin',
+        sortable: true
     },
     {
         key: 'status',
-        label: 'Statut'
+        label: 'Statut actuel',
+        sortable: true
     },
     {
         key: 'actions'

@@ -1,13 +1,8 @@
 import { t } from 'elysia';
 import { HousingType } from '@prisma/client';
 
-export const BookingHousingLookupDTO = t.Object({
-    startDate: t.Date(),
-    endDate: t.Date()
-});
-
 export const SearchHousingLookupDTO = t.Object({
-    text: t.String(),
+    text: t.Optional(t.String()),
     startDate: t.Date(),
     endDate: t.Date(),
     type: t.Optional(t.Enum(HousingType)),
@@ -18,6 +13,5 @@ export const SearchHousingLookupDTO = t.Object({
 });
 
 export const SearchModels = {
-    BookingHousingLookupDTO,
     SearchHousingLookupDTO
 };
