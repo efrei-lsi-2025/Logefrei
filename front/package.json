@@ -1,33 +1,33 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "@elysiajs/eden": "^1.0.13",
-    "@fullcalendar/core": "^6.1.11",
-    "@fullcalendar/daygrid": "^6.1.11",
-    "@fullcalendar/interaction": "^6.1.11",
-    "@fullcalendar/vue3": "^6.1.11",
-    "@nuxt/ui": "^2.16.0",
-    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
-    "@pinia/nuxt": "^0.5.1",
-    "date-fns": "^3.6.0",
-    "mitt": "^3.0.1",
-    "nuxt": "^3.11.2",
-    "v-calendar": "^3.1.2",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
-    "zod": "^3.23.8"
-  },
-  "devDependencies": {
-    "elysia": "^1.0.17",
-    "nuxt3-leaflet": "^1.0.12"
-  }
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare"
+    },
+    "dependencies": {
+        "@elysiajs/eden": "^1.0.13",
+        "@fullcalendar/core": "^6.1.11",
+        "@fullcalendar/daygrid": "^6.1.11",
+        "@fullcalendar/interaction": "^6.1.11",
+        "@fullcalendar/vue3": "^6.1.11",
+        "@nuxt/ui": "^2.16.0",
+        "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
+        "@pinia/nuxt": "^0.5.1",
+        "date-fns": "^3.6.0",
+        "mitt": "^3.0.1",
+        "nuxt": "^3.11.2",
+        "v-calendar": "^3.1.2",
+        "vue": "^3.4.27",
+        "vue-router": "^4.3.2",
+        "zod": "^3.23.8",
+        "nuxt3-leaflet": "^1.0.12"
+    },
+    "devDependencies": {
+        "elysia": "^1.0.17"
+    }
 }
