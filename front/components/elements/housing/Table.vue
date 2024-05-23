@@ -11,23 +11,28 @@ const { data, pending } = toRefs(props);
 const columns = [
     {
         key: 'address',
-        label: 'Adresse'
+        label: 'Adresse',
+        sortable: true
     },
     {
         key: 'type',
-        label: 'Type'
+        label: 'Type',
+        sortable: true
     },
     {
         key: 'surface',
-        label: 'Surface (m²)'
+        label: 'Surface (m²)',
+        sortable: true
     },
     {
         key: 'rent',
-        label: 'Loyer (€ / nuit)'
+        label: 'Loyer (€ / nuit)',
+        sortable: true
     },
     {
         key: 'status',
-        label: 'Statut'
+        label: 'Statut',
+        sortable: true
     }
 ];
 

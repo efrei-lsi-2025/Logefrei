@@ -1,10 +1,12 @@
 <script setup lang="ts">
-const { status } = defineProps<{
+const props = defineProps<{
     status: 'Accepted' | 'Pending' | 'Rejected' | 'Cancelled';
 }>();
 
+const status = toRef(props, 'status');
+
 const text = computed(() => {
-    switch (status) {
+    switch (status.value) {
         case 'Accepted':
             return 'Accepté';
         case 'Pending':
@@ -17,7 +19,7 @@ const text = computed(() => {
 });
 
 const color = computed(() => {
-    switch (status) {
+    switch (status.value) {
         case 'Accepted':
             return 'green';
         case 'Pending':
