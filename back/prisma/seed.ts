@@ -32,7 +32,7 @@ const insertHousings = async () => {
         take: NUMBER_OF_USERS
     });
 
-    const housings = Array.from({ length: NUMBER_OF_USERS }, (_, index) => {
+    const housings = Array.from({ length: NUMBER_OF_HOUSINGS }, (_, index) => {
         const type = faker.helpers.arrayElement(Object.values(HousingType));
 
         let rent: number, surface: number;
@@ -65,7 +65,7 @@ const insertHousings = async () => {
         data: housings
     });
 
-    console.log(`Inserted ${NUMBER_OF_USERS} housings`);
+    console.log(`Inserted ${NUMBER_OF_HOUSINGS} housings`);
 };
 
 const insertBookings = async () => {
