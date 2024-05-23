@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { z } from 'zod';
+import type { FormSubmitEvent } from '#ui/types';
+
 const { id: housingId } = defineProps<{
     id: string;
 }>();
@@ -6,9 +9,6 @@ const { id: housingId } = defineProps<{
 const emit = defineEmits<{
     (e: 'close'): void;
 }>();
-
-import { z } from 'zod';
-import type { FormSubmitEvent } from '#ui/types';
 
 const { $client, $event, $listen } = useNuxtApp();
 const router = useRouter();
