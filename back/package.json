@@ -1,26 +1,27 @@
 {
-    "name": "back",
-    "version": "1.0.50",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start:dev": "bun run --watch src/index.ts",
-        "start:prod": "bunx prisma migrate deploy && bun run src/index.ts",
-        "prisma:dev:env": "cross-env DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres",
-        "prisma:dev:migrate": "bun run prisma:dev:env prisma migrate dev && bunx prisma generate",
-        "prisma:dev:seed": "bun run prisma:dev:env prisma db seed",
-        "prisma:dev:apply": "bun run prisma:dev:env prisma migrate deploy",
-        "prisma:dev:studio": "bun run prisma:dev:env prisma studio"
-    },
-    "dependencies": {
-        "@elysiajs/eden": "^1.0.13",
-        "@elysiajs/swagger": "^1.0.5",
-        "@prisma/client": "5.13.0",
-        "elysia": "^1.0.18"
-    },
-    "devDependencies": {
-        "bun-types": "latest",
-        "cross-env": "^7.0.3",
-        "prisma": "5.13.0"
-    },
-    "module": "src/index.js"
+  "name": "back",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "bun run --watch src/index.ts",
+    "start:prod": "bunx prisma migrate deploy && bun run src/index.ts",
+    "prisma:dev:env": "cross-env DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres",
+    "prisma:dev:migrate": "bun run prisma:dev:env prisma migrate dev && bunx prisma generate",
+    "prisma:dev:seed": "bun run prisma:dev:env prisma db seed",
+    "prisma:dev:apply": "bun run prisma:dev:env prisma migrate deploy",
+    "prisma:dev:studio": "bun run prisma:dev:env prisma studio"
+  },
+  "dependencies": {
+    "@elysiajs/eden": "^1.0.13",
+    "@elysiajs/swagger": "^1.0.5",
+    "@prisma/client": "5.13.0",
+    "cron": "^3.1.7",
+    "elysia": "^1.0.18"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "cross-env": "^7.0.3",
+    "prisma": "5.13.0"
+  },
+  "module": "src/index.js"
 }

@@ -70,4 +70,46 @@ export abstract class HousingsService {
         if (housing.ownerId !== user.id)
             throw new InvalidOperationError('You cannot update a housing you do not own');
     }
+
+    static async autoSetAvailableHousings() {
+        return await prisma.housing.updateMany({
+            where: {
+                status: 'Published',
+                availabilityStatus: {
+                    not: 'Available'
+                },
+                bookings: {
+                    none: {
+                        AND: [
+                            { status: 'Accepted' },
+                            { startDate: { lte: new Date() } },
+                            { endDate: { gte: new Date() } }
+                        ]
+                    }
+                }
+            },
+            data: { availabilityStatus: 'Available' }
+        });
+    }
+
+    static async autoSetOccupiedHousings() {
+        return await prisma.housing.updateMany({
+            where: {
+                status: 'Published',
+                availabilityStatus: {
+                    not: 'Occupied'
+                },
+                bookings: {
+                    some: {
+                        AND: [
+                            { status: 'Accepted' },
+                            { startDate: { lte: new Date() } },
+                            { endDate: { gte: new Date() } }
+                        ]
+                    }
+                }
+            },
+            data: { availabilityStatus: 'Occupied' }
+        });
+    }
 }
