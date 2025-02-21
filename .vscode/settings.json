@@ -3,5 +3,8 @@
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
   "editor.wordWrap": "on",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[helm]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }

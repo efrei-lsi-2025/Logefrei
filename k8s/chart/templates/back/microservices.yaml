@@ -1,0 +1,75 @@
+{{- range .Values.logefrei.back.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ $.Values.logefrei.namespace }}
+  name: {{ .name }}
+  labels:
+    app: {{ .name }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          env:
+            - name: SERVICE
+              value: {{ .name }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.logefrei.database.secret }}
+                  key: DATABASE_URL
+            - name: PORT
+              value: "3000"
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ $.Values.logefrei.namespace }}
+  name: {{ .name }}
+  labels:
+    app: {{ .name }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: {{ .name }}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  namespace: {{ $.Values.logefrei.namespace }}
+  name: {{ .name }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ $.Values.logefrei.back.traefik.host }}`) && PathPrefix(`/api/{{ .name }}`)
+      kind: Rule
+      services:
+        - name: {{ .name }}
+          port: 3000
+      middlewares:
+        - name: authentik
+    {{- if eq .name "bookings" }}
+    - match: Host(`{{ $.Values.logefrei.back.traefik.host }}`) && PathPrefix(`/docs`)
+      kind: Rule
+      services:
+        - name: {{ .name }}
+          port: 3000
+      middlewares:
+        - name: authentik
+    {{- end }}
+{{- end }}

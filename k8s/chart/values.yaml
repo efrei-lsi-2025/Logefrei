@@ -1,0 +1,52 @@
+# Application
+
+logefrei:
+  namespace: logefrei
+
+  database:
+    secret: app-db-secret
+    user: postgres
+    password: postgres
+    database: postgres
+
+  back:
+    image:
+      repository: ghcr.io/efrei-lsi-2025/logefrei-back
+      tag: main
+
+    traefik:
+      host: app.logefrei.svc.cluster.local
+
+    services:
+      - name: bookings
+        replicas: 2
+      - name: search
+        replicas: 2
+      - name: housings
+        replicas: 2
+      - name: users
+        replicas: 2
+
+# Authentik
+
+authentik:
+  namespaceOverride: logefrei
+
+  authentik:
+    secret_key: "authentik-long-secret-key"
+    postgresql:
+      password: "postgres"
+
+  server:
+    ingress:
+      enabled: true
+      hosts:
+        - authentik.logefrei.svc.cluster.local
+
+  postgresql:
+    enabled: true
+    auth:
+      password: "postgres"
+
+  redis:
+    enabled: true
