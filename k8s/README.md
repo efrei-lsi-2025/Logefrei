@@ -19,6 +19,10 @@ helm upgrade --install traefik \
     --set dashboard.enabled=true \
     --set rbac.enabled=true \
     --set nodeSelector.node-type=master \
-    --set="additionalArguments={--api.dashboard=true,--log.level=INFO,--providers.kubernetesingress.ingressclass=traefik-internal,--serversTransport.insecureSkipVerify=true}" \
+    --set="additionalArguments={--api.dashboard=true,--log.level=DEBUG,--providers.kubernetesingress.ingressclass=traefik-internal,--serversTransport.insecureSkipVerify=true}" \
     traefik/traefik
 ````
+
+## Identifiants
+
+admin sur Authentik: admin@logefrei.fr / admin

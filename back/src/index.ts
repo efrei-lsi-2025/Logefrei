@@ -1,12 +1,12 @@
+import swagger from '@elysiajs/swagger';
 import Elysia from 'elysia';
 import { BookingsController } from './services/bookings';
+import { InternalBookingsController } from './services/bookings/internal';
 import { HousingsController } from './services/housings';
+import { InternalHousingsController } from './services/housings/internal';
 import { SearchController } from './services/search';
 import { UsersController } from './services/users';
-import swagger from '@elysiajs/swagger';
-import { InternalBookingsController } from './services/bookings/internal';
-import { RecordNotFoundError, InvalidOperationError, UnauthorizedError } from './utils/errors';
-import { InternalHousingsController } from './services/housings/internal';
+import { InvalidOperationError, RecordNotFoundError, UnauthorizedError } from './utils/errors';
 
 const app = new Elysia()
     .use(

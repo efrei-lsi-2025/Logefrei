@@ -1,52 +1,61 @@
 # Application
 
 logefrei:
-  namespace: logefrei
+    namespace: logefrei
+    host: logefrei.k8s.orb.local
 
-  database:
-    secret: app-db-secret
-    user: postgres
-    password: postgres
-    database: postgres
+    authentik:
+        url: authentik.k8s.orb.local
+        outpostName: logefrei
+        outpostToken: "authentik-outpost-token"
 
-  back:
-    image:
-      repository: ghcr.io/efrei-lsi-2025/logefrei-back
-      tag: k8s
+    database:
+        secret: app-db-secret
+        user: postgres
+        password: postgres
+        database: postgres
 
-    traefik:
-      host: app.logefrei.svc.cluster.local
+    front:
+        image:
+            repository: ghcr.io/efrei-lsi-2025/logefrei-front
+            tag: k8s
+        replicas: 3
 
-    services:
-      - name: bookings
-        replicas: 2
-      - name: search
-        replicas: 2
-      - name: housings
-        replicas: 2
-      - name: users
-        replicas: 2
+    back:
+        image:
+            repository: ghcr.io/efrei-lsi-2025/logefrei-back
+            tag: k8s
+
+        services:
+            - name: bookings
+              replicas: 2
+            - name: search
+              replicas: 2
+            - name: housings
+              replicas: 2
+            - name: users
+              replicas: 2
 
 # Authentik
 
 authentik:
-  namespaceOverride: logefrei
+    namespaceOverride: logefrei
 
-  authentik:
-    secret_key: "authentik-long-secret-key"
+    authentik:
+        secret_key: "authentik-long-secret-key"
+        postgresql:
+            password: "postgres"
+
+    server:
+        ingress:
+            enabled: true
+            hosts:
+                - authentik.k8s.orb.local
+
     postgresql:
-      password: "postgres"
+        enabled: true
+        auth:
+            password: "postgres"
 
-  server:
-    ingress:
-      enabled: true
-      hosts:
-        - authentik.logefrei.svc.cluster.local
-
-  postgresql:
-    enabled: true
-    auth:
-      password: "postgres"
-
-  redis:
-    enabled: true
+    redis:
+        enabled: true

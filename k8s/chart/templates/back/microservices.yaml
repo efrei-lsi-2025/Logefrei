@@ -53,23 +53,21 @@ metadata:
   namespace: {{ $.Values.logefrei.namespace }}
   name: {{ .name }}
 spec:
-  entryPoints:
-    - web
   routes:
-    - match: Host(`{{ $.Values.logefrei.back.traefik.host }}`) && PathPrefix(`/api/{{ .name }}`)
+    - match: Host(`{{ $.Values.logefrei.host }}`) && PathPrefix(`/api/{{ .name }}`)
       kind: Rule
       services:
         - name: {{ .name }}
           port: 3000
       middlewares:
-        - name: authentik
+        - name: ak-outpost-authentik-embedded-outpost
     {{- if eq .name "bookings" }}
-    - match: Host(`{{ $.Values.logefrei.back.traefik.host }}`) && PathPrefix(`/docs`)
+    - match: Host(`{{ $.Values.logefrei.host }}`) && PathPrefix(`/docs`)
       kind: Rule
       services:
         - name: {{ .name }}
           port: 3000
       middlewares:
-        - name: authentik
+        - name: ak-outpost-authentik-embedded-outpost
     {{- end }}
 {{- end }}

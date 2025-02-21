@@ -1,10 +1,12 @@
 import { treaty } from '@elysiajs/eden';
 import { App } from '..';
 
-export const InternalBookingsClient = treaty<App>(
-    `http://bookings:${Bun.env.PORT}`
-)['internal']['bookings'];
+// TODO: gRPC
 
-export const InternalHousingsClient = treaty<App>(
-    `http://housings:${Bun.env.PORT}`
-)['internal']['housings'];
+export const InternalBookingsClient = treaty<App>(`http://bookings.logefrei:${Bun.env.PORT}`)[
+    'internal'
+]['bookings'];
+
+export const InternalHousingsClient = treaty<App>(`http://housings.logefrei:${Bun.env.PORT}`)[
+    'internal'
+]['housings'];
