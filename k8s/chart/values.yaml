@@ -12,7 +12,7 @@ logefrei:
   back:
     image:
       repository: ghcr.io/efrei-lsi-2025/logefrei-back
-      tag: main
+      tag: k8s
 
     traefik:
       host: app.logefrei.svc.cluster.local

@@ -20,7 +20,7 @@ jobs:
             dockerfile: ./front/Dockerfile
           - image: ghcr.io/${{ github.repository }}-back
             context: ./back
-            dockerfile: ./back/Dockerfile
+            dockerfile: ./back/Dockerfile.bun
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@main
