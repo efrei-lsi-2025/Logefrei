@@ -1,5 +1,4 @@
-ARG ARCH=
-FROM ${ARCH}ubuntu:22.04 AS base
+FROM --platform=${BUILDPLATFORM} ubuntu:22.04 AS base
 
 RUN apt-get update && apt-get install -y curl gnupg zip unzip
 
