@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: background
-          image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          image: "{{ $.Values.logefrei.back.image.repository }}-full:{{ $.Values.logefrei.back.image.tag }}"
           imagePullPolicy: Always
           env:
             - name: PORT

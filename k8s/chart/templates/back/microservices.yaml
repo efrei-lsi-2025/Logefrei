@@ -15,7 +15,7 @@ spec:
           command: ['sh', '-c', 'until nc -z -v -w30 postgres.logefrei 5432; do echo waiting for database; sleep 5; done']
       containers:
         - name: migrate
-          image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          image: "{{ $.Values.logefrei.back.image.repository }}-full:{{ $.Values.logefrei.back.image.tag }}"
           command: ["sh", "-c", "bunx prisma migrate deploy"]
           env:
             - name: DATABASE_URL
@@ -75,7 +75,7 @@ spec:
           command: ['sh', '-c', 'until kubectl get job migrate-job -n {{ $.Values.logefrei.namespace }} -o jsonpath="{.status.succeeded}" | grep 1; do echo waiting for migration job to complete; sleep 5; done']
       containers:
         - name: {{ .name }}
-          image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          image: "{{ $.Values.logefrei.back.image.repository }}-slim:{{ $.Values.logefrei.back.image.tag }}"
           imagePullPolicy: Always
           env:
             - name: SERVICE
