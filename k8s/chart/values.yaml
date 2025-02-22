@@ -28,13 +28,13 @@ logefrei:
 
     services:
       - name: bookings
-        replicas: 2
+        replicas: 3
       - name: search
-        replicas: 2
+        replicas: 3
       - name: housings
-        replicas: 2
+        replicas: 3
       - name: users
-        replicas: 2
+        replicas: 3
 
 # Authentik
 

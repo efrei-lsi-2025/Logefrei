@@ -9,6 +9,10 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: wait-for-database
+          image: busybox
+          command: ['sh', '-c', 'until nc -z -v -w30 postgres.logefrei 5432; do echo waiting for database; sleep 5; done']
       containers:
         - name: migrate
           image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
@@ -21,6 +25,30 @@ spec:
                   key: DATABASE_URL
       restartPolicy: Never
   backoffLimit: 1
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: {{ $.Values.logefrei.namespace }}
+  name: job-reader
+rules:
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: {{ $.Values.logefrei.namespace }}
+  name: read-jobs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: job-reader
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: {{ $.Values.logefrei.namespace }}
 {{- range .Values.logefrei.back.services }}
 ---
 apiVersion: apps/v1
@@ -43,7 +71,7 @@ spec:
     spec:
       initContainers:
         - name: wait-for-migration
-          image: busybox
+          image: bitnami/kubectl
           command: ['sh', '-c', 'until kubectl get job migrate-job -n {{ $.Values.logefrei.namespace }} -o jsonpath="{.status.succeeded}" | grep 1; do echo waiting for migration job to complete; sleep 5; done']
       containers:
         - name: {{ .name }}
