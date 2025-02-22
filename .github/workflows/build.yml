@@ -18,7 +18,10 @@ jobs:
           - image: ghcr.io/${{ github.repository }}-front
             context: ./front
             dockerfile: ./front/Dockerfile
-          - image: ghcr.io/${{ github.repository }}-back
+          - image: ghcr.io/${{ github.repository }}-back-slim
+            context: ./back
+            dockerfile: ./back/Dockerfile.prod
+          - image: ghcr.io/${{ github.repository }}-back-full
             context: ./back
             dockerfile: ./back/Dockerfile.bun
           - image: ghcr.io/${{ github.repository }}-authentik-db

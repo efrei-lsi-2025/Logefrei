@@ -1,0 +1,28 @@
+FROM --platform=${BUILDPLATFORM} oven/bun:1 AS build
+
+WORKDIR /app
+
+COPY . .
+
+ENV NODE_ENV=production
+
+RUN apt-get update -y && apt-get install -y openssl
+
+RUN bun install --frozen-lockfile
+
+RUN bunx prisma generate
+RUN bun run compile
+
+FROM --platform=${BUILDPLATFORM} debian:bullseye-slim
+
+WORKDIR /app
+
+# For healthcheck
+RUN apt-get update -y && apt-get install -y curl
+
+COPY --from=build /app/app app
+COPY --from=build /app/node_modules/.prisma node_modules/.prisma
+
+EXPOSE 3000
+
+CMD [ "./app" ]
