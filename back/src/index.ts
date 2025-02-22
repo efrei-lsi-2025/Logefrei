@@ -29,6 +29,7 @@ const app = new Elysia()
         UnauthorizedError
     })
     .onError(({ code, error }) => {
+        console.log('Error:', code, error.message);
         switch (code) {
             case 'InvalidOperationError':
                 return new Response(error.message, { status: 400 });
@@ -37,6 +38,10 @@ const app = new Elysia()
             case 'RecordNotFoundError':
                 return new Response(error.message, { status: 404 });
         }
+    })
+
+    .onRequest(({ request }) => {
+        console.log('Request:', request.method, request.url);
     })
 
     .get('/health', () => 'OK')
@@ -56,5 +61,12 @@ const app = new Elysia()
     .listen(Bun.env.PORT, () => {
         console.log(`🚀 Service "${Bun.env.SERVICE}" started on port ${Bun.env.PORT}`);
     });
+
+console.log(`🚀 Service "${Bun.env.SERVICE}" starting...`);
+
+setInterval(() => {
+    console.log('Memory usage:', process.memoryUsage());
+    console.log('Uptime:', process.uptime());
+}, 1e3);
 
 export type App = typeof app;
