@@ -7,6 +7,7 @@ metadata:
   name: {{ .name }}
   labels:
     app: {{ .name }}
+    version: {{ $.Chart.AppVersion }}
 spec:
   replicas: {{ .replicas }}
   selector:
@@ -40,6 +41,7 @@ metadata:
   name: {{ .name }}
   labels:
     app: {{ .name }}
+    version: {{ $.Chart.AppVersion }}
 spec:
   ports:
     - port: 3000
@@ -52,6 +54,9 @@ kind: IngressRoute
 metadata:
   namespace: {{ $.Values.logefrei.namespace }}
   name: {{ .name }}
+  labels:
+    app: {{ .name }}
+    version: {{ $.Chart.AppVersion }}
 spec:
   routes:
     - match: Host(`{{ $.Values.logefrei.host }}`) && PathPrefix(`/api/{{ .name }}`)

@@ -21,6 +21,9 @@ jobs:
           - image: ghcr.io/${{ github.repository }}-back
             context: ./back
             dockerfile: ./back/Dockerfile.bun
+          - image: ghcr.io/${{ github.repository }}-authentik-db
+            context: ./init-db/authentik
+            dockerfile: ./init-db/authentik/Dockerfile
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@main

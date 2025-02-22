@@ -6,6 +6,7 @@ metadata:
   name: front
   labels:
     app: front
+    version: {{ $.Chart.AppVersion }}
 spec:
   replicas: {{$.Values.logefrei.front.replicas}}
   selector:
@@ -29,6 +30,7 @@ metadata:
   name: front
   labels:
     app: front
+    version: {{ $.Chart.AppVersion }}
 spec:
   ports:
     - port: 3000
@@ -41,6 +43,9 @@ kind: IngressRoute
 metadata:
   namespace: {{$.Values.logefrei.namespace}}
   name: front
+  labels:
+    app: front
+    version: {{ $.Chart.AppVersion }}
 spec:
   routes:
     - match: Host(`{{ $.Values.logefrei.host }}`)

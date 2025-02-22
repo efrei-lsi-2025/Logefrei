@@ -6,8 +6,7 @@ Helm: ```bash
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 chmod 700 get_helm.sh
 sudo ./get_helm.sh
-
-````
+```
 
 Traefik comme Ingress Controller: ```bash
 helm repo add traefik https://helm.traefik.io/traefik
@@ -21,8 +20,17 @@ helm upgrade --install traefik \
     --set nodeSelector.node-type=master \
     --set="additionalArguments={--api.dashboard=true,--log.level=DEBUG,--providers.kubernetesingress.ingressclass=traefik-internal,--serversTransport.insecureSkipVerify=true}" \
     traefik/traefik
-````
+
+# Pour exposer le dashboard
+kubectl apply -f traefik-dev.yaml
+```
+
+```
+kubectl create ns logefrei
+helm install logefrei chart --namespace logefrei
+```
 
 ## Identifiants
 
 admin sur Authentik: admin@logefrei.fr / admin
+

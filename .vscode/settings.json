@@ -6,5 +6,8 @@
   "editor.formatOnSave": true,
   "[helm]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[markdown]": {
+    "editor.formatOnSave": false
   }
 }
