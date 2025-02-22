@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} oven/bun:1 AS build
+FROM --platform=${BUILDPLATFORM} oven/bun:1-debian AS build
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN bun install --frozen-lockfile
 RUN bunx prisma generate
 RUN bun run compile
 
-FROM --platform=${BUILDPLATFORM} debian:bullseye-slim
+FROM --platform=${BUILDPLATFORM} debian:bullseye
 
 WORKDIR /app
 
