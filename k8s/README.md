@@ -25,6 +25,13 @@ helm upgrade --install traefik \
 kubectl apply -f traefik-dev.yaml
 ```
 
+Kube Dashboard: ```bash
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+```
+
+## Installation
+
 ```
 kubectl create ns logefrei
 helm install logefrei chart --namespace logefrei

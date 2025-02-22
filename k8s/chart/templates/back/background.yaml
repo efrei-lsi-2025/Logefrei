@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{$.Values.logefrei.namespace}}
+  name: background
+  labels:
+    app: background
+    version: {{ $.Chart.AppVersion }}
+spec:
+  replicas: {{$.Values.logefrei.back.replicas}}
+  selector:
+    matchLabels:
+      app: background
+  template:
+    metadata:
+      labels:
+        app: background
+    spec:
+      containers:
+        - name: background
+          image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "3000"
+          command: ["bun", "run", "src/services/background/index.ts"]

@@ -1,3 +1,26 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ $.Values.logefrei.namespace }}
+  name: migrate-job
+  labels:
+    app: migrate-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          command: ["sh", "-c", "bunx prisma migrate deploy"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.logefrei.database.secret }}
+                  key: DATABASE_URL
+      restartPolicy: Never
+  backoffLimit: 1
 {{- range .Values.logefrei.back.services }}
 ---
 apiVersion: apps/v1
@@ -18,9 +41,14 @@ spec:
       labels:
         app: {{ .name }}
     spec:
+      initContainers:
+        - name: wait-for-migration
+          image: busybox
+          command: ['sh', '-c', 'until kubectl get job migrate-job -n {{ $.Values.logefrei.namespace }} -o jsonpath="{.status.succeeded}" | grep 1; do echo waiting for migration job to complete; sleep 5; done']
       containers:
         - name: {{ .name }}
           image: "{{ $.Values.logefrei.back.image.repository }}:{{ $.Values.logefrei.back.image.tag }}"
+          imagePullPolicy: Always
           env:
             - name: SERVICE
               value: {{ .name }}
