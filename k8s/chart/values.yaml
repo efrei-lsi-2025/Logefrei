@@ -19,7 +19,7 @@ logefrei:
     image:
       repository: ghcr.io/efrei-lsi-2025/logefrei-front
       tag: k8s
-    replicas: 3
+    replicas: 1
 
   back:
     image:
@@ -28,13 +28,13 @@ logefrei:
 
     services:
       - name: bookings
-        replicas: 3
+        replicas: 1
       - name: search
-        replicas: 3
+        replicas: 1
       - name: housings
-        replicas: 3
+        replicas: 1
       - name: users
-        replicas: 3
+        replicas: 1
 
 # Authentik
 
