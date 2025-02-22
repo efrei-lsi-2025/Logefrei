@@ -13,7 +13,7 @@ RUN bun install --frozen-lockfile
 RUN bunx prisma generate
 RUN bun run compile
 
-FROM debian:bullseye-slim
+FROM --platform=${BUILDPLATFORM} debian:bullseye-slim
 
 WORKDIR /app
 
