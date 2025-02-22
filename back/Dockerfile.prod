@@ -18,11 +18,11 @@ FROM --platform=${BUILDPLATFORM} debian:bullseye
 WORKDIR /app
 
 # For healthcheck
-RUN apt-get update -y && apt-get install -y curl
+RUN apt-get update -y && apt-get install -y curl strace
 
 COPY --from=build /app/app app
 COPY --from=build /app/node_modules/.prisma node_modules/.prisma
 
 EXPOSE 3000
 
-CMD [ "./app" ]
+CMD ["strace", "-f", "./app"]
