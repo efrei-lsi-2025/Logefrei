@@ -1,13 +1,4 @@
-FROM --platform=${BUILDPLATFORM} ubuntu:22.04 AS base
-
-RUN apt-get update && apt-get install -y curl gnupg zip unzip
-
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
-
-ENV BUN_INSTALL=/home/bun
-RUN curl -fsSL https://bun.sh/install | bash
-ENV PATH=$PATH:/home/bun/bin
+FROM --platform=${BUILDPLATFORM} oven/bun:1 AS base
 
 WORKDIR /home/bun/app
 
@@ -19,9 +10,6 @@ COPY prisma/schema.prisma /temp/prisma/schema.prisma
 RUN cd /temp && bun install --frozen-lockfile --production && bunx prisma generate
 
 FROM base AS release
-
-RUN useradd -m bun
-RUN chown -R bun:bun /home/bun
 
 COPY --chown=bun:bun --from=install /temp/node_modules node_modules
 COPY --chown=bun:bun . .

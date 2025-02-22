@@ -20,10 +20,10 @@ jobs:
             dockerfile: ./front/Dockerfile
           - image: ghcr.io/${{ github.repository }}-back-slim
             context: ./back
-            dockerfile: ./back/Dockerfile.prod
+            dockerfile: ./back/Dockerfile
           - image: ghcr.io/${{ github.repository }}-back-full
             context: ./back
-            dockerfile: ./back/Dockerfile.bun
+            dockerfile: ./back/Dockerfile
           - image: ghcr.io/${{ github.repository }}-authentik-db
             context: ./init-db/authentik
             dockerfile: ./init-db/authentik/Dockerfile
