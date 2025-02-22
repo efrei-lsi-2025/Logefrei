@@ -20,7 +20,7 @@ jobs:
             dockerfile: ./front/Dockerfile
           - image: ghcr.io/${{ github.repository }}-back-slim
             context: ./back
-            dockerfile: ./back/Dockerfile.dev
+            dockerfile: ./back/Dockerfile.prod
           - image: ghcr.io/${{ github.repository }}-back-full
             context: ./back
             dockerfile: ./back/Dockerfile.bun
