@@ -39,6 +39,8 @@ const app = new Elysia()
         }
     })
 
+    .get('/health', () => 'OK')
+
     .group('/api', (app) =>
         app
             .group('/bookings', (app) => app.use(BookingsController))
