@@ -29,7 +29,7 @@ const app = new Elysia()
         UnauthorizedError
     })
     .onError(({ code, error }) => {
-        console.log('Error:', code, error.message);
+        console.log('Error:', code, error);
         switch (code) {
             case 'InvalidOperationError':
                 return new Response(error.message, { status: 400 });

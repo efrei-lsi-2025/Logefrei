@@ -1,7 +1,9 @@
-import Elysia, { t } from 'elysia';
+import Elysia from 'elysia';
 import prisma from '../clients/prisma';
 
 const createOrGetUser = async (name: string, email: string) => {
+    console.log('Creating or getting user', name, email);
+
     const user = await prisma.user.findFirst({
         where: {
             email
@@ -11,6 +13,8 @@ const createOrGetUser = async (name: string, email: string) => {
     if (user) {
         return user;
     }
+
+    console.log('Creating user', name, email);
 
     return prisma.user.create({
         data: {
@@ -29,6 +33,9 @@ export const userRegisterPlugin = (app: Elysia) =>
             headers['x-authentik-name'],
             headers['x-authentik-email']
         );
+
+        console.log('User registered', user);
+
         return {
             user
         };

@@ -17,12 +17,12 @@
         "prisma:dev:studio": "bun run prisma:dev:env prisma studio"
     },
     "dependencies": {
-        "@elysiajs/eden": "^1.0.13",
-        "@elysiajs/swagger": "^1.0.5",
-        "@prisma/client": "5.13.0",
+        "@elysiajs/eden": "^1.2.0",
+        "@elysiajs/swagger": "^1.2.2",
         "@faker-js/faker": "^8.4.1",
+        "@prisma/client": "5.13.0",
         "cron": "^3.1.7",
-        "elysia": "^1.0.18"
+        "elysia": "^1.2.20"
     },
     "devDependencies": {
         "bun-types": "latest",
