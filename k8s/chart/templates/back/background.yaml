@@ -17,6 +17,10 @@ spec:
       labels:
         app: background
     spec:
+      initContainers:
+        - name: wait-for-migration
+          image: bitnami/kubectl
+          command: ['sh', '-c', 'until kubectl get job migrate-job -n {{ $.Values.logefrei.namespace }} -o jsonpath="{.status.succeeded}" | grep 1; do echo waiting for migration job to complete; sleep 5; done']
       containers:
         - name: background
           image: "{{ $.Values.logefrei.back.image.repository }}-full:{{ $.Values.logefrei.back.image.tag }}"
